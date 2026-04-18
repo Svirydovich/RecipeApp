@@ -1,8 +1,8 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+<resources>
+
     <style name="Base.Theme.EnglishWordsApp" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="android:statusBarColor">@color/color_main_background</item>
+        <item name="android:navigationBarColor">@color/color_main_background</item>
     </style>
 
     <style name="Theme.EnglishWordsApp" parent="Base.Theme.EnglishWordsApp" />
