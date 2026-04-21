@@ -23,6 +23,18 @@ class MainActivity : AppCompatActivity() {
                 .commit()
         }
 
+        binding.btnCategories.setOnClickListener {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.mainContainer, CategoriesListFragment())
+                .commit()
+        }
+
+        binding.btnFavorites.setOnClickListener {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.mainContainer, FavoritesFragment())
+                .commit()
+        }
+
         ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
