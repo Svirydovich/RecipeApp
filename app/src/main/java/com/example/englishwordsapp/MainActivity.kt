@@ -5,6 +5,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.fragment.app.commit
 import com.example.englishwordsapp.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -24,15 +25,15 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.btnCategories.setOnClickListener {
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.mainContainer, CategoriesListFragment())
-                .commit()
+            supportFragmentManager.commit {
+                replace(R.id.mainContainer, CategoriesListFragment())
+            }
         }
 
         binding.btnFavorites.setOnClickListener {
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.mainContainer, FavoritesFragment())
-                .commit()
+            supportFragmentManager.commit {
+                replace(R.id.mainContainer, FavoritesFragment())
+            }
         }
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
