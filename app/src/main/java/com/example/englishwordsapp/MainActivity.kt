@@ -19,20 +19,29 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction()
-                .add(R.id.mainContainer, CategoriesListFragment())
-                .commit()
+            supportFragmentManager.commit {
+                setReorderingAllowed(true)
+                replace(R.id.mainContainer, CategoriesListFragment())
+                addToBackStack(null)
+            }
         }
 
         binding.btnCategories.setOnClickListener {
             supportFragmentManager.commit {
-                replace(R.id.mainContainer, CategoriesListFragment())
+                setReorderingAllowed(true)
+                replace<Fragment>(R.id.mainContainer,
+                    CategoriesListFragment()
+                )
+                replace<androidx.fragment.app.Fragment>(R.id.mainContainer, CategoriesListFragment())
+                addToBackStack(null)
             }
         }
 
         binding.btnFavorites.setOnClickListener {
             supportFragmentManager.commit {
+                setReorderingAllowed(true)
                 replace(R.id.mainContainer, FavoritesFragment())
+                addToBackStack(null)
             }
         }
 
