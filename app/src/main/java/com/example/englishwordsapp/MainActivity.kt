@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.commit
+import androidx.fragment.app.replace
 import com.example.englishwordsapp.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -29,10 +30,7 @@ class MainActivity : AppCompatActivity() {
         binding.btnCategories.setOnClickListener {
             supportFragmentManager.commit {
                 setReorderingAllowed(true)
-                replace<Fragment>(R.id.mainContainer,
-                    CategoriesListFragment()
-                )
-                replace<androidx.fragment.app.Fragment>(R.id.mainContainer, CategoriesListFragment())
+                replace<CategoriesListFragment>(R.id.mainContainer)
                 addToBackStack(null)
             }
         }
@@ -40,7 +38,7 @@ class MainActivity : AppCompatActivity() {
         binding.btnFavorites.setOnClickListener {
             supportFragmentManager.commit {
                 setReorderingAllowed(true)
-                replace(R.id.mainContainer, FavoritesFragment())
+                replace<FavoritesFragment>(R.id.mainContainer)
                 addToBackStack(null)
             }
         }
