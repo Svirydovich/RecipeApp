@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/color_main_background"
+    android:background="@color/alabaster"
     android:orientation="vertical">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="256dp">
+        android:layout_height="@dimen/header_height">
 
         <ImageView
-            android:id="@+id/imageViewHeader"
+            android:id="@+id/ivCategoriesHeader"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:contentDescription="@string/header_image_description"
             android:scaleType="centerCrop"
             android:src="@drawable/bcg_categories"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -23,19 +24,15 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/textViewFragmentTitle"
+            android:id="@+id/tvFragmentTitle"
+            style="@style/HeaderTitleStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/shape_header_background"
-            android:paddingStart="16dp"
-            android:paddingTop="8dp"
-
-            android:paddingEnd="16dp"
-            android:paddingBottom="8dp"
-            android:text="@string/categories"
-            android:textColor="@color/black"
-            android:textSize="20sp"
-
+            android:paddingStart="@dimen/padding_indention"
+            android:paddingTop="@dimen/padding_indention"
+            android:paddingEnd="@dimen/padding_indention"
+            android:paddingBottom="@dimen/padding_indention"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
@@ -45,15 +42,15 @@
         android:id="@+id/rvCategories"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
+        android:layout_weight="1"
         android:clipToPadding="false"
         android:paddingBottom="16dp"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:spanCount="2"
-        tools:listitem="@layout/item_category"
-        tools:itemCount="6"/>
+        tools:itemCount="6"
+        tools:listitem="@layout/item_category" />
 
 </LinearLayout>
