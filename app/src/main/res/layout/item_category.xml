@@ -22,7 +22,7 @@
             android:layout_height="48dp"
             android:layout_marginEnd="16dp"
             android:contentDescription="@string/category_icon_description"
-            android:src="@drawable/ic_launcher_recipes" />
+            tools:src="@drawable/bcg_recipes_list" />
 
         <TextView
             android:id="@+id/textViewCategoryName"
