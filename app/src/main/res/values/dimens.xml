@@ -3,7 +3,11 @@
     <dimen name="margin_half">8dp</dimen>
     <dimen name="margin_gap">2dp</dimen>
     <dimen name="text_size_title">14sp</dimen>
+    <dimen name="text_size_description">12sp</dimen>
+    <dimen name="text_size_header">20sp</dimen>
     <dimen name="corner_radius_button">8dp</dimen>
     <dimen name="header_height">224dp</dimen>
     <dimen name="padding_indention">10dp</dimen>
+    <dimen name="description_layout_width">140dp</dimen>
+    <dimen name="description_layout_height">50dp</dimen>
 </resources>

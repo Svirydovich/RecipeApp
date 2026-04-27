@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_margin="@dimen/margin_half"
     android:clickable="true"
     android:focusable="true"
     android:foreground="?attr/selectableItemBackground"
@@ -13,8 +13,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingTop="16dp"
+        android:orientation="vertical"
         android:paddingBottom="8dp">
 
         <ImageView
@@ -27,12 +26,20 @@
 
         <TextView
             android:id="@+id/textViewCategoryName"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Название категории"
-            android:textColor="@color/black"
-            android:textSize="18sp" />
+            android:textAllCaps="true"
+            tools:text="Название категории"
+            android:textColor="@color/plum"
+            android:textSize="@dimen/text_size_title" />
+
+        <TextView
+            android:id="@+id/tvCategoryDescription"
+            style="@style/CategoryDescriptionStyle"
+            android:layout_width="@dimen/description_layout_width"
+            android:layout_height="@dimen/description_layout_height"
+            tools:text="Описание категории" />
 
     </LinearLayout>
 </androidx.cardview.widget.CardView>
