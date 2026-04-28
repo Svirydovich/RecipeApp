@@ -17,28 +17,30 @@
         android:paddingBottom="8dp">
 
         <ImageView
-            android:id="@+id/imageViewCategoryIcon"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_marginEnd="16dp"
+            android:id="@+id/ivCategoryIcon"
+            android:layout_width="@dimen/category_icon_layout_width"
+            android:layout_height="@dimen/category_icon_layout_height"
+            android:layout_marginStart="@dimen/margin_half"
+            android:layout_marginEnd="@dimen/margin_half"
             android:contentDescription="@string/category_icon_description"
             tools:src="@drawable/bcg_recipes_list" />
 
         <TextView
-            android:id="@+id/textViewCategoryName"
+            android:id="@+id/tvCategoryName"
+            style="@style/CategoryNameStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_half"
+            android:layout_marginEnd="@dimen/margin_half"
             android:layout_weight="1"
-            android:textAllCaps="true"
-            tools:text="Название категории"
-            android:textColor="@color/plum"
-            android:textSize="@dimen/text_size_title" />
+            tools:text="Название категории" />
 
         <TextView
             android:id="@+id/tvCategoryDescription"
             style="@style/CategoryDescriptionStyle"
             android:layout_width="@dimen/description_layout_width"
             android:layout_height="@dimen/description_layout_height"
+            android:layout_marginStart="@dimen/margin_half"
             tools:text="Описание категории" />
 
     </LinearLayout>
