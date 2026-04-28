@@ -11,4 +11,27 @@
         <item name="android:textAppearance">@style/StyleTitle14</item>
         <item name="cornerRadius">@dimen/corner_radius_button</item>
     </style>
+
+    <style name="HeaderTitleStyle">
+        <item name="android:textSize">@dimen/text_size_header</item>
+        <item name="android:fontFamily">@font/montserrat_alternates_semibold</item>
+        <item name="android:fontWeight">600</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textColor">@color/plum</item>
+    </style>
+
+    <style name="CategoryDescriptionStyle">
+        <item name="android:textSize">@dimen/text_size_description</item>
+        <item name="android:fontFamily">@font/montserrat_medium</item>
+        <item name="android:fontWeight">500</item>
+        <item name="android:textColor">@color/gray</item>
+    </style>
+
+    <style name="CategoryNameStyle">
+        <item name="android:textSize">@dimen/text_size_title</item>
+        <item name="android:fontFamily">@font/montserrat_alternates_semibold</item>
+        <item name="android:fontWeight">600</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textColor">@color/plum</item>
+    </style>
 </resources>
