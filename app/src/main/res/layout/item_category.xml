@@ -14,14 +14,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingBottom="8dp">
+        android:padding="@dimen/margin_half">
 
         <ImageView
-            android:id="@+id/ivCategoryIcon"
-            android:layout_width="@dimen/category_icon_layout_width"
+            android:id="@+id/ivCategoryImage"
+            android:layout_width="wrap_content"
+            android:scaleType="centerCrop"
             android:layout_height="@dimen/category_icon_layout_height"
-            android:layout_marginStart="@dimen/margin_half"
-            android:layout_marginEnd="@dimen/margin_half"
             android:contentDescription="@string/category_icon_description"
             tools:src="@drawable/bcg_recipes_list" />
 
@@ -30,17 +29,17 @@
             style="@style/CategoryNameStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_half"
-            android:layout_marginEnd="@dimen/margin_half"
+            android:layout_margin="@dimen/margin_half"
             android:layout_weight="1"
             tools:text="Название категории" />
 
         <TextView
             android:id="@+id/tvCategoryDescription"
             style="@style/CategoryDescriptionStyle"
-            android:layout_width="@dimen/description_layout_width"
-            android:layout_height="@dimen/description_layout_height"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_half"
+            android:layout_marginEnd="@dimen/margin_half"
             tools:text="Описание категории" />
 
     </LinearLayout>

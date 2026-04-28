@@ -18,12 +18,11 @@
         <item name="android:fontWeight">600</item>
         <item name="android:textAllCaps">true</item>
         <item name="android:textColor">@color/plum</item>
-        <item name="android:text">@string/categories</item>
     </style>
 
     <style name="CategoryDescriptionStyle">
         <item name="android:textSize">@dimen/text_size_description</item>
-        <item name="android:fontFamily">@font/montserrat_alternates_semibold</item>
+        <item name="android:fontFamily">@font/montserrat_alternates_medium</item>
         <item name="android:fontWeight">500</item>
         <item name="android:textColor">@color/gray</item>
     </style>
