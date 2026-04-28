@@ -8,8 +8,5 @@
     <dimen name="corner_radius_button">8dp</dimen>
     <dimen name="header_height">224dp</dimen>
     <dimen name="padding_indention">10dp</dimen>
-    <dimen name="description_layout_width">140dp</dimen>
-    <dimen name="description_layout_height">50dp</dimen>
-    <dimen name="category_icon_layout_width">156dp</dimen>
     <dimen name="category_icon_layout_height">130dp</dimen>
 </resources>
