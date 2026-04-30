@@ -3,46 +3,40 @@ package com.example.englishwordsapp
 import android.graphics.drawable.Drawable
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.englishwordsapp.databinding.ItemCategoryBinding
 import com.example.englishwordsapp.model.Category
 
 class CategoriesListAdapter(private val dataSet: List<Category>) :
     RecyclerView.Adapter<CategoriesListAdapter.ViewHolder>() {
 
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val imageView: ImageView = view.findViewById(R.id.ivCategoryImage)
-        val titleTextView: TextView = view.findViewById(R.id.tvCategoryName)
-        val descriptionTextView: TextView = view.findViewById(R.id.tvCategoryDescription)
-    }
+    class ViewHolder(val binding: ItemCategoryBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(category: Category) {
+            binding.tvCategoryName.text = category.title
+            binding.tvCategoryDescription.text = category.description
 
-    override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(viewGroup.context)
-            .inflate(R.layout.item_category, viewGroup, false)
-
-        return ViewHolder(view)
-    }
-
-    override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-        val category: Category = dataSet[position]
-        viewHolder.titleTextView.text = category.title
-        viewHolder.descriptionTextView.text = category.description
-
-        try {
-
-            val drawable = Drawable.createFromStream(
-                viewHolder.itemView.context.assets.open(category.imageUrl),
-                null
-            )
-            viewHolder.imageView.setImageDrawable(drawable)
-        } catch (e: Exception) {
-            Log.e("CategoriesListAdapter", "Error loading image", e)
+            try {
+                val drawable = Drawable.createFromStream(
+                    itemView.context.assets.open(category.imageUrl),
+                    null
+                )
+                binding.ivCategoryImage.setImageDrawable(drawable)
+            } catch (e: Exception) {
+                Log.e("CategoriesListAdapter", "Error loading image", e)
+            }
         }
     }
 
-    override fun getItemCount() = dataSet.size
+    override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
+        val binding =
+            ItemCategoryBinding.inflate(LayoutInflater.from(viewGroup.context), viewGroup, false)
+        return ViewHolder(binding)
+    }
 
+    override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
+        viewHolder.bind(dataSet[position])
+    }
+
+    override fun getItemCount() = dataSet.size
 }
