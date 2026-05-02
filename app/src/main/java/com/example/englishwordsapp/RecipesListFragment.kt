@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.commit
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.englishwordsapp.databinding.FragmentRecipesListBinding
 import com.example.englishwordsapp.model.Category
@@ -46,9 +47,9 @@ class RecipesListFragment : Fragment() {
     }
 
     private fun openRecipesByCategoryId(category: Category) {
-        val transaction = parentFragmentManager.beginTransaction()
-        transaction.replace(R.id.mainContainer, RecipesListFragment())
-        transaction.addToBackStack(null)
-        transaction.commit()
+        parentFragmentManager.commit {
+            replace(R.id.mainContainer, RecipesListFragment())
+            addToBackStack(null)
+        }
     }
 }
