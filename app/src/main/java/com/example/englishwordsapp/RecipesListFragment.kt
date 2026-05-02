@@ -8,13 +8,16 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.englishwordsapp.databinding.FragmentRecipesListBinding
-import com.example.englishwordsapp.model.Category
 
 class RecipesListFragment : Fragment() {
 
     private var _binding: FragmentRecipesListBinding? = null
     private val binding get() = _binding!!
     private lateinit var categoriesAdapter: CategoriesListAdapter
+
+    private var categoryId: Int? = null
+    private var categoryName: String? = null
+    private var categoryImageUrl: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -28,14 +31,19 @@ class RecipesListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        categoryId = arguments?.getInt("ARG_CATEGORY_ID")
+        categoryName = arguments?.getString("ARG_CATEGORY_NAME")
+        categoryImageUrl = arguments?.getString("ARG_CATEGORY_IMAGE_URL")
+
         categoriesAdapter = CategoriesListAdapter(emptyList())
 
         binding.rvRecipes.apply {
             adapter = categoriesAdapter
             layoutManager = LinearLayoutManager(requireContext())
-            categoriesAdapter.setOnItemClickListener(object : CategoriesListAdapter.OnItemClickListener {
-                override fun onItemClick(category: Category) {
-                    openRecipesByCategoryId(category)
+            categoriesAdapter.setOnItemClickListener(object :
+                CategoriesListAdapter.OnItemClickListener {
+                override fun onItemClick(categoryId: Int) {
+                    openRecipesByCategoryId(categoryId)
                 }
             })
         }
@@ -46,7 +54,7 @@ class RecipesListFragment : Fragment() {
         _binding = null
     }
 
-    private fun openRecipesByCategoryId(category: Category) {
+    private fun openRecipesByCategoryId(categoryId: Int) {
         parentFragmentManager.commit {
             replace(R.id.mainContainer, RecipesListFragment())
             addToBackStack(null)

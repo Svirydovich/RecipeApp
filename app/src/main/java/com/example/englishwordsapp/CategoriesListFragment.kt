@@ -8,7 +8,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.englishwordsapp.databinding.FragmentListCategoriesBinding
-import com.example.englishwordsapp.model.Category
 
 class CategoriesListFragment : Fragment() {
 
@@ -41,16 +40,28 @@ class CategoriesListFragment : Fragment() {
         binding.rvCategories.adapter = categoriesAdapter
         binding.rvCategories.layoutManager = LinearLayoutManager(requireContext())
 
-        categoriesAdapter.setOnItemClickListener(object : CategoriesListAdapter.OnItemClickListener {
-            override fun onItemClick(category: Category) {
-                openRecipesByCategoryId(category)
+        categoriesAdapter.setOnItemClickListener(object :
+            CategoriesListAdapter.OnItemClickListener {
+            override fun onItemClick(categoryId: Int) {
+                openRecipesByCategoryId(categoryId)
             }
         })
     }
 
-    private fun openRecipesByCategoryId(category: Category) {
+    private fun openRecipesByCategoryId(categoryId: Int) {
+        val category = STUB.getCategories().find { it.id == categoryId }
+
+        val categoryName = category?.title ?: ""
+        val categoryImageUrl = category?.imageUrl ?: ""
+
+        val bundle = Bundle().apply {
+            putInt("ARG_CATEGORY_ID", categoryId)
+            putString("ARG_CATEGORY_NAME", categoryName)
+            putString("ARG_CATEGORY_IMAGE_URL", categoryImageUrl)
+        }
+
         parentFragmentManager.commit {
-            replace(R.id.mainContainer, RecipesListFragment())
+            replace(R.id.mainContainer, RecipesListFragment::class.java, bundle)
             addToBackStack(null)
         }
     }
