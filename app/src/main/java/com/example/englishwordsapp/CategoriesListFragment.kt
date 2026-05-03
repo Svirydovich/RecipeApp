@@ -11,6 +11,12 @@ import com.example.englishwordsapp.databinding.FragmentListCategoriesBinding
 
 class CategoriesListFragment : Fragment() {
 
+    companion object {
+        const val ARG_CATEGORY_ID = "ARG_CATEGORY_ID"
+        const val ARG_CATEGORY_NAME = "ARG_CATEGORY_NAME"
+        const val ARG_CATEGORY_IMAGE_URL = "ARG_CATEGORY_IMAGE_URL"
+    }
+
     private var _binding: FragmentListCategoriesBinding? = null
     private val binding get() = _binding!!
 
@@ -55,9 +61,9 @@ class CategoriesListFragment : Fragment() {
         val categoryImageUrl = category?.imageUrl ?: ""
 
         val bundle = Bundle().apply {
-            putInt("ARG_CATEGORY_ID", categoryId)
-            putString("ARG_CATEGORY_NAME", categoryName)
-            putString("ARG_CATEGORY_IMAGE_URL", categoryImageUrl)
+            putInt(ARG_CATEGORY_ID, categoryId)
+            putString(ARG_CATEGORY_NAME, categoryName)
+            putString(ARG_CATEGORY_IMAGE_URL, categoryImageUrl)
         }
 
         parentFragmentManager.commit {
