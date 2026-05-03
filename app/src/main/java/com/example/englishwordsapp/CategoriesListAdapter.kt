@@ -11,7 +11,7 @@ import com.example.englishwordsapp.model.Category
 class CategoriesListAdapter(private val dataSet: List<Category>) :
     RecyclerView.Adapter<CategoriesListAdapter.ViewHolder>() {
     interface OnItemClickListener {
-        fun onItemClick(category: Category)
+        fun onItemClick(categoryId: Int)
     }
 
     private var itemClickListener: OnItemClickListener? = null
@@ -46,7 +46,7 @@ class CategoriesListAdapter(private val dataSet: List<Category>) :
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         viewHolder.bind(dataSet[position])
         viewHolder.itemView.setOnClickListener {
-            itemClickListener?.onItemClick(dataSet[position])
+            itemClickListener?.onItemClick(dataSet[position].id)
         }
     }
 
