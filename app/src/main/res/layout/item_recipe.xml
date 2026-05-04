@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
@@ -15,18 +16,17 @@
         <ImageView
             android:id="@+id/ivRecipeImage"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="@dimen/item_recipe_layout_height"
             android:contentDescription="@string/recipe_image"
             android:scaleType="centerCrop" />
 
         <TextView
             android:id="@+id/tvRecipeTitle"
+            style="@style/CategoryNameStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:text="Название рецепта"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+            android:padding="@dimen/margin_half"
+            tools:text="Название рецепта" />
 
     </LinearLayout>
 

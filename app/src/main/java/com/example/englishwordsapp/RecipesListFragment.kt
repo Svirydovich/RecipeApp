@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
+import androidx.fragment.app.replace
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.englishwordsapp.databinding.FragmentRecipesListBinding
 
@@ -37,9 +38,7 @@ class RecipesListFragment : Fragment() {
         categoryImageUrl = arguments?.getString(CategoriesListFragment.ARG_CATEGORY_IMAGE_URL)
 
         binding.tvRecipesTitle.text = categoryName
-        if (categoryImageUrl != null) {
-            loadImageFromAssets(binding.ivCategoryImage, categoryImageUrl!!)
-        }
+        categoryImageUrl?.let { loadImageFromAssets(binding.ivCategoryImage, it) }
 
         val recipes = STUB.getRecipesByCategoryId(categoryId ?: 0)
 
@@ -71,7 +70,7 @@ class RecipesListFragment : Fragment() {
 
     private fun openRecipeByRecipeId(recipeId: Int) {
         parentFragmentManager.commit {
-            replace(R.id.mainContainer, RecipeFragment())
+            replace<RecipeFragment>(R.id.mainContainer)
             addToBackStack(null)
         }
     }

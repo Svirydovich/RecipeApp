@@ -9,4 +9,7 @@
     <dimen name="header_height">224dp</dimen>
     <dimen name="padding_indention">10dp</dimen>
     <dimen name="category_icon_layout_height">130dp</dimen>
+    <dimen name="item_recipe_layout_height">100dp</dimen>
+    <dimen name="layout_margin_top">196dp</dimen>
+    <dimen name="layout_height">256dp</dimen>
 </resources>
