@@ -1,6 +1,7 @@
 <resources>
     <dimen name="margin_main">16dp</dimen>
     <dimen name="margin_half">8dp</dimen>
+    <dimen name="margin_quarter">4dp</dimen>
     <dimen name="margin_gap">2dp</dimen>
     <dimen name="text_size_title">14sp</dimen>
     <dimen name="text_size_description">12sp</dimen>
@@ -9,4 +10,6 @@
     <dimen name="header_height">224dp</dimen>
     <dimen name="padding_indention">10dp</dimen>
     <dimen name="category_icon_layout_height">130dp</dimen>
+    <dimen name="item_recipe_layout_height">100dp</dimen>
+    <dimen name="layout_margin_top">196dp</dimen>
 </resources>

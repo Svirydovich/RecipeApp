@@ -6,8 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.englishwordsapp.databinding.FragmentListCategoriesBinding
+import androidx.fragment.app.replace
 
 class CategoriesListFragment : Fragment() {
 
@@ -44,7 +44,6 @@ class CategoriesListFragment : Fragment() {
         val categoriesAdapter = CategoriesListAdapter(categories)
 
         binding.rvCategories.adapter = categoriesAdapter
-        binding.rvCategories.layoutManager = LinearLayoutManager(requireContext())
 
         categoriesAdapter.setOnItemClickListener(object :
             CategoriesListAdapter.OnItemClickListener {
@@ -67,7 +66,7 @@ class CategoriesListFragment : Fragment() {
         }
 
         parentFragmentManager.commit {
-            replace(R.id.mainContainer, RecipesListFragment::class.java, bundle)
+            replace<RecipesListFragment>(R.id.mainContainer, args = bundle)
             addToBackStack(null)
         }
     }

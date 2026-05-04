@@ -1,11 +1,14 @@
 package com.example.englishwordsapp
 
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
+import androidx.fragment.app.replace
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.englishwordsapp.databinding.FragmentRecipesListBinding
 
@@ -13,7 +16,6 @@ class RecipesListFragment : Fragment() {
 
     private var _binding: FragmentRecipesListBinding? = null
     private val binding get() = _binding!!
-    private lateinit var categoriesAdapter: CategoriesListAdapter
 
     private var categoryId: Int? = null
     private var categoryName: String? = null
@@ -35,17 +37,29 @@ class RecipesListFragment : Fragment() {
         categoryName = arguments?.getString(CategoriesListFragment.ARG_CATEGORY_NAME)
         categoryImageUrl = arguments?.getString(CategoriesListFragment.ARG_CATEGORY_IMAGE_URL)
 
-        categoriesAdapter = CategoriesListAdapter(emptyList())
+        binding.tvRecipesTitle.text = categoryName
+        categoryImageUrl?.let { loadImageFromAssets(binding.ivCategoryImage, it) }
+
+        val recipes = STUB.getRecipesByCategoryId(categoryId ?: 0)
+
+        val recipeAdapter = RecipeAdapter(recipes, { recipeId ->
+            openRecipeByRecipeId(recipeId)
+        }, requireContext())
 
         binding.rvRecipes.apply {
-            adapter = categoriesAdapter
+            adapter = recipeAdapter
             layoutManager = LinearLayoutManager(requireContext())
-            categoriesAdapter.setOnItemClickListener(object :
-                CategoriesListAdapter.OnItemClickListener {
-                override fun onItemClick(categoryId: Int) {
-                    openRecipesByCategoryId(categoryId)
-                }
-            })
+        }
+    }
+
+    private fun loadImageFromAssets(imageView: ImageView, imageName: String) {
+        try {
+            val inputStream = requireContext().assets.open(imageName)
+            val bitmap = BitmapFactory.decodeStream(inputStream)
+            imageView.setImageBitmap(bitmap)
+            inputStream.close()
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 
@@ -54,9 +68,9 @@ class RecipesListFragment : Fragment() {
         _binding = null
     }
 
-    private fun openRecipesByCategoryId(categoryId: Int) {
+    private fun openRecipeByRecipeId(recipeId: Int) {
         parentFragmentManager.commit {
-            replace(R.id.mainContainer, RecipesListFragment())
+            replace<RecipeFragment>(R.id.mainContainer)
             addToBackStack(null)
         }
     }
