@@ -69,9 +69,17 @@ class RecipesListFragment : Fragment() {
     }
 
     private fun openRecipeByRecipeId(recipeId: Int) {
-        parentFragmentManager.commit {
-            replace<RecipeFragment>(R.id.mainContainer)
-            addToBackStack(null)
+        val recipe = STUB.getRecipeById(recipeId)
+
+        if (recipe != null) {
+            val bundle = Bundle().apply {
+                putParcelable(RecipeFragment.ARG_RECIPE, recipe)
+            }
+
+            parentFragmentManager.commit {
+                replace<RecipeFragment>(R.id.mainContainer, args = bundle)
+                addToBackStack(null)
+            }
         }
     }
 }
