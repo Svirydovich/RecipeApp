@@ -8,8 +8,10 @@
     <dimen name="text_size_header">20sp</dimen>
     <dimen name="corner_radius_button">8dp</dimen>
     <dimen name="header_height">224dp</dimen>
+    <dimen name="header_width_ingredients">242dp</dimen>
     <dimen name="padding_indention">10dp</dimen>
     <dimen name="category_icon_layout_height">130dp</dimen>
     <dimen name="item_recipe_layout_height">100dp</dimen>
     <dimen name="layout_margin_top">196dp</dimen>
+    <dimen name="layout_margin_top_ingredients">140dp</dimen>
 </resources>
