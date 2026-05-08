@@ -33,12 +33,13 @@ class RecipeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val recipe = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
-            arguments?.getParcelable(ARG_RECIPE, Recipe::class.java)
-        } else {
-            @Suppress("DEPRECATION")
-            (arguments?.getParcelable(ARG_RECIPE))
-        }
+        val recipe =
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+                arguments?.getParcelable(ARG_RECIPE, Recipe::class.java)
+            } else {
+                @Suppress("DEPRECATION")
+                (arguments?.getParcelable(ARG_RECIPE))
+            }
 
         if (recipe != null) {
             initUI(recipe)
@@ -63,16 +64,32 @@ class RecipeFragment : Fragment() {
     }
 
     private fun initRecycler(recipe: Recipe) {
+        val dpToPx = { dp: Int ->
+            (dp * requireContext().resources.displayMetrics.density).toInt()
+        }
+
         binding.rvIngredients.adapter = IngredientsAdapter(recipe.ingredients)
         binding.rvIngredients.layoutManager = LinearLayoutManager(context)
         binding.rvIngredients.addItemDecoration(
             MaterialDividerItemDecoration(requireContext(), MaterialDividerItemDecoration.VERTICAL)
+        )
+        binding.rvIngredients.addItemDecoration(
+            VerticalSpaceItemDecoration(
+                spaceBetween = dpToPx(8),
+                spaceEdge = dpToPx(12)
+            )
         )
 
         binding.rvMethod.adapter = MethodAdapter(recipe.method)
         binding.rvMethod.layoutManager = LinearLayoutManager(context)
         binding.rvMethod.addItemDecoration(
             MaterialDividerItemDecoration(requireContext(), MaterialDividerItemDecoration.VERTICAL)
+        )
+        binding.rvMethod.addItemDecoration(
+            VerticalSpaceItemDecoration(
+                spaceBetween = dpToPx(8),
+                spaceEdge = dpToPx(12)
+            )
         )
     }
 

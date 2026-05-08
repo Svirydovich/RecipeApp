@@ -12,9 +12,8 @@ class MethodAdapter(private val steps: List<String>) :
     class MethodViewHolder(private val binding: ItemMethodBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        @SuppressLint("SetTextI18n")
-        fun bind(step: String, position: Int) {
-            binding.tvMethodStep.text = "${position + 1}. $step"
+            fun bind(step: String) {
+            binding.tvMethodStep.text = step
         }
     }
 
@@ -24,7 +23,7 @@ class MethodAdapter(private val steps: List<String>) :
     }
 
     override fun onBindViewHolder(holder: MethodViewHolder, position: Int) {
-        holder.bind(steps[position], position)
+        holder.bind(steps[position])
     }
 
     override fun getItemCount(): Int = steps.size

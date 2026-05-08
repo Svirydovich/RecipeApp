@@ -4,24 +4,24 @@
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
     android:orientation="horizontal"
-    android:padding="12dp">
+    android:paddingStart="@dimen/padding_item"
+    android:paddingEnd="@dimen/padding_item">
 
     <TextView
         android:id="@+id/tvIngredientName"
+        style="@style/IngredientDescription"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:ellipsize="end"
-        android:maxLines="1"
-        android:textSize="16sp" />
+        android:maxLines="1" />
 
     <TextView
         android:id="@+id/tvIngredientQuantity"
+        style="@style/IngredientDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:gravity="end"
-        android:textColor="@android:color/darker_gray"
-        android:textSize="14sp" />
+        android:layout_marginStart="@dimen/margin_main"
+        android:gravity="end" />
 
 </LinearLayout>
