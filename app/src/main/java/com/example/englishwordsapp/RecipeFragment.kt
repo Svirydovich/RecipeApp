@@ -64,32 +64,28 @@ class RecipeFragment : Fragment() {
     }
 
     private fun initRecycler(recipe: Recipe) {
-        val dpToPx = { dp: Int ->
-            (dp * requireContext().resources.displayMetrics.density).toInt()
-        }
-
         binding.rvIngredients.adapter = IngredientsAdapter(recipe.ingredients)
         binding.rvIngredients.layoutManager = LinearLayoutManager(context)
         binding.rvIngredients.addItemDecoration(
-            MaterialDividerItemDecoration(requireContext(), MaterialDividerItemDecoration.VERTICAL)
-        )
-        binding.rvIngredients.addItemDecoration(
-            VerticalSpaceItemDecoration(
-                spaceBetween = dpToPx(8),
-                spaceEdge = dpToPx(12)
-            )
+            MaterialDividerItemDecoration(
+                requireContext(),
+                MaterialDividerItemDecoration.VERTICAL
+            ).apply {
+                isLastItemDecorated = false
+                setDividerColorResource(requireContext(), R.color.white)
+            }
         )
 
         binding.rvMethod.adapter = MethodAdapter(recipe.method)
         binding.rvMethod.layoutManager = LinearLayoutManager(context)
         binding.rvMethod.addItemDecoration(
-            MaterialDividerItemDecoration(requireContext(), MaterialDividerItemDecoration.VERTICAL)
-        )
-        binding.rvMethod.addItemDecoration(
-            VerticalSpaceItemDecoration(
-                spaceBetween = dpToPx(8),
-                spaceEdge = dpToPx(12)
-            )
+            MaterialDividerItemDecoration(
+                requireContext(),
+                MaterialDividerItemDecoration.VERTICAL
+            ).apply {
+                isLastItemDecorated = false
+                setDividerColorResource(requireContext(), R.color.white)
+            }
         )
     }
 

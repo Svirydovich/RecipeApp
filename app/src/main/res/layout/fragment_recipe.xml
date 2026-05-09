@@ -29,15 +29,13 @@
                 android:layout_width="@dimen/header_width_ingredients"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_main"
-                android:layout_marginTop="@dimen/layout_margin_top_ingredients"
                 android:layout_marginBottom="@dimen/margin_main"
                 android:background="@drawable/shape_header_background"
                 android:paddingStart="@dimen/padding_indention"
                 android:paddingTop="@dimen/padding_indention"
                 android:paddingBottom="@dimen/padding_indention"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 tools:ignore="RtlSymmetry" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -55,9 +53,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_main"
-            android:layout_marginEnd="@dimen/margin_main"
             android:layout_marginTop="@dimen/margin_main"
-            android:background="@drawable/shape_header_background"
+            android:layout_marginEnd="@dimen/margin_main"
+            android:padding="@dimen/margin_quarter"
+            android:background="@drawable/shape_recipe_background"
             android:nestedScrollingEnabled="false" />
 
         <TextView
@@ -74,6 +73,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_main"
             android:layout_marginTop="@dimen/margin_main"
+            android:padding="@dimen/margin_quarter"
             android:background="@drawable/shape_header_background"
             android:nestedScrollingEnabled="false" />
 

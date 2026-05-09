@@ -4,6 +4,7 @@
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
     android:orientation="horizontal"
+    android:layout_margin="@dimen/margin_quarter"
     android:paddingStart="@dimen/padding_item"
     android:paddingEnd="@dimen/padding_item">
 
