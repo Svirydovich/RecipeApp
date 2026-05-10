@@ -72,7 +72,7 @@ class RecipeFragment : Fragment() {
                 MaterialDividerItemDecoration.VERTICAL
             ).apply {
                 isLastItemDecorated = false
-                setDividerColorResource(requireContext(), R.color.white)
+                setDividerColorResource(requireContext(), R.color.dark_white)
                 dividerInsetStart = resources.getDimensionPixelSize(R.dimen.padding_item)
                 dividerInsetEnd = resources.getDimensionPixelSize(R.dimen.padding_item)
             }
@@ -86,7 +86,9 @@ class RecipeFragment : Fragment() {
                 MaterialDividerItemDecoration.VERTICAL
             ).apply {
                 isLastItemDecorated = false
-                setDividerColorResource(requireContext(), R.color.white)
+                setDividerColorResource(requireContext(), R.color.dark_white)
+                dividerInsetStart = resources.getDimensionPixelSize(R.dimen.padding_item)
+                dividerInsetEnd = resources.getDimensionPixelSize(R.dimen.padding_item)
             }
         )
     }

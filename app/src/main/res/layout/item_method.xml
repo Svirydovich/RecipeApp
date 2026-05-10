@@ -2,10 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
     android:layout_margin="@dimen/margin_half"
-    android:paddingStart="@dimen/padding_item"
-    android:paddingEnd="@dimen/padding_item">
+    android:orientation="vertical"
+    android:paddingStart="@dimen/padding_item">
 
     <TextView
         android:id="@+id/tvMethodStep"

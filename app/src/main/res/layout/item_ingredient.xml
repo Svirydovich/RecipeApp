@@ -2,11 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_margin="@dimen/margin_half"
     android:gravity="center_vertical"
-    android:orientation="horizontal"
-    android:layout_margin="@dimen/margin_quarter"
-    android:paddingStart="@dimen/margin_half"
-    android:paddingEnd="@dimen/margin_half">
+    android:orientation="horizontal">
 
     <TextView
         android:id="@+id/tvIngredientName"
