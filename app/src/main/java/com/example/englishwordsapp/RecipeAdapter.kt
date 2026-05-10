@@ -4,7 +4,6 @@ import android.graphics.BitmapFactory
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.englishwordsapp.databinding.ItemRecipeBinding
 import com.example.englishwordsapp.model.Recipe

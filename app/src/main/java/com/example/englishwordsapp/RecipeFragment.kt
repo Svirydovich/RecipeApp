@@ -73,6 +73,8 @@ class RecipeFragment : Fragment() {
             ).apply {
                 isLastItemDecorated = false
                 setDividerColorResource(requireContext(), R.color.white)
+                dividerInsetStart = resources.getDimensionPixelSize(R.dimen.padding_item)
+                dividerInsetEnd = resources.getDimensionPixelSize(R.dimen.padding_item)
             }
         )
 

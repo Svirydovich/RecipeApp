@@ -3,13 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:layout_margin="@dimen/margin_quarter"
+    android:layout_margin="@dimen/margin_half"
     android:paddingStart="@dimen/padding_item"
     android:paddingEnd="@dimen/padding_item">
 
     <TextView
         android:id="@+id/tvMethodStep"
-        style="@style/CockingDescription"
+        style="@style/CookingDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

@@ -26,14 +26,13 @@
             <TextView
                 android:id="@+id/tvRecipeName"
                 style="@style/CategoryNameStyle"
-                android:layout_width="@dimen/header_width_ingredients"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_main"
                 android:layout_marginBottom="@dimen/margin_main"
                 android:background="@drawable/shape_header_background"
-                android:paddingStart="@dimen/padding_indention"
-                android:paddingTop="@dimen/padding_indention"
-                android:paddingBottom="@dimen/padding_indention"
+                android:padding="@dimen/padding_indention"
+                android:maxWidth="@dimen/header_width_ingredients"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 tools:ignore="RtlSymmetry" />
@@ -44,17 +43,15 @@
             style="@style/CategoryNameStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_main"
-            android:layout_marginEnd="@dimen/margin_main"
+            android:layout_marginHorizontal="@dimen/margin_main"
             android:text="@string/ingredients" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvIngredients"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_main"
+            android:layout_marginHorizontal="@dimen/margin_main"
             android:layout_marginTop="@dimen/margin_main"
-            android:layout_marginEnd="@dimen/margin_main"
             android:padding="@dimen/margin_quarter"
             android:background="@drawable/shape_recipe_background"
             android:nestedScrollingEnabled="false" />
@@ -71,10 +68,10 @@
             android:id="@+id/rvMethod"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_main"
+            android:layout_marginHorizontal="@dimen/margin_main"
             android:layout_marginTop="@dimen/margin_main"
             android:padding="@dimen/margin_quarter"
-            android:background="@drawable/shape_header_background"
+            android:background="@drawable/shape_recipe_background"
             android:nestedScrollingEnabled="false" />
 
     </LinearLayout>
