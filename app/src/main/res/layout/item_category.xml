@@ -26,12 +26,12 @@
 
         <TextView
             android:id="@+id/tvCategoryName"
-            style="@style/CategoryNameStyle"
+            style="@style/ItemCategoryStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_half"
             android:layout_weight="1"
-            tools:text="Название категории" />
+            tools:text="Элемент категории" />
 
         <TextView
             android:id="@+id/tvCategoryDescription"

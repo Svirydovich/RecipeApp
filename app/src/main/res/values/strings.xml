@@ -5,4 +5,7 @@
     <string name="category_icon_description">Обложка категории</string>
     <string name="header_image_description">Фоновое изображение с продуктами питания</string>
     <string name="recipe_image">Изображение рецепта</string>
+    <string name="ingredients">Ингредиенты</string>
+    <string name="list_of_recipes">Список рецептов</string>
+    <string name="cooking_method">Способ приготовления</string>
 </resources>
