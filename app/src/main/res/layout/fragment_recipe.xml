@@ -48,6 +48,39 @@
             android:layout_marginHorizontal="@dimen/margin_main"
             android:text="@string/ingredients" />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_main"
+            android:layout_marginTop="@dimen/margin_main"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/PortionsNameStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="@dimen/margin_portions"
+                android:text="@string/portions" />
+
+            <TextView
+                android:id="@+id/tvServingCount"
+                style="@style/PortionsNameStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_portions"
+                android:text="1" />
+
+        </LinearLayout>
+
+        <SeekBar
+            android:id="@+id/sbServings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="5"
+            android:min="1"
+            android:progress="1" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvIngredients"
             android:layout_width="match_parent"
