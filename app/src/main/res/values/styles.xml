@@ -35,7 +35,6 @@
     <style name="PortionsNameStyle">
         <item name="android:textSize">@dimen/text_size_portions</item>
         <item name="android:fontFamily">@font/montserrat_semibold</item>
-        <item name="android:textAllCaps">true</item>
         <item name="android:textColor">@color/gray</item>
     </style>
 

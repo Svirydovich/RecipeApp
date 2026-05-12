@@ -52,7 +52,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/margin_main"
-            android:layout_marginTop="@dimen/margin_main"
+            android:layout_marginTop="@dimen/margin_portions"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
@@ -60,7 +60,6 @@
                 style="@style/PortionsNameStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="@dimen/margin_portions"
                 android:text="@string/portions" />
 
             <TextView

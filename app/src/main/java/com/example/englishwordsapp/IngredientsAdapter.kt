@@ -6,6 +6,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.englishwordsapp.databinding.ItemIngredientBinding
 import com.example.englishwordsapp.model.Ingredient
+import java.math.BigDecimal
+import java.math.RoundingMode
 
 class IngredientsAdapter(private val ingredients: List<Ingredient>) :
     RecyclerView.Adapter<IngredientsAdapter.IngredientViewHolder>() {
@@ -19,15 +21,15 @@ class IngredientsAdapter(private val ingredients: List<Ingredient>) :
         fun bind(ingredient: Ingredient, quantity: Int) {
             binding.tvIngredientName.text = ingredient.description
 
-            val baseQuantity = ingredient.quantity.toDoubleOrNull() ?: 0.0
+            val baseQuantity = ingredient.quantity.toBigDecimalOrNull() ?: BigDecimal.ZERO
 
-            val totalQuantity = baseQuantity * quantity
+            val totalQuantity = baseQuantity.multiply(BigDecimal(quantity))
 
-            val quantityText = if (totalQuantity == 0.0) {
+            val quantityText = if (totalQuantity == BigDecimal.ZERO) {
                 ingredient.quantity
-            } else if (totalQuantity % 1 == 0.0) {
-                totalQuantity.toInt().toString()
-            } else String.format("%.1f", totalQuantity)
+            } else if (totalQuantity.scale() <= 0 || totalQuantity.remainder(BigDecimal.ONE) == BigDecimal.ZERO) {
+                totalQuantity.toBigInteger().toString()
+            } else totalQuantity.setScale(1, RoundingMode.HALF_UP).toPlainString()
 
             binding.tvIngredientQuantity.text = "$quantityText ${ingredient.unitOfMeasure}"
         }
