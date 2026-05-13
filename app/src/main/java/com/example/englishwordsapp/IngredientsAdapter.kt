@@ -25,11 +25,12 @@ class IngredientsAdapter(private val ingredients: List<Ingredient>) :
 
             val totalQuantity = baseQuantity.multiply(BigDecimal(quantity))
 
-            val quantityText = if (totalQuantity == BigDecimal.ZERO) {
-                ingredient.quantity
-            } else if (totalQuantity.scale() <= 0 || totalQuantity.remainder(BigDecimal.ONE) == BigDecimal.ZERO) {
-                totalQuantity.toBigInteger().toString()
-            } else totalQuantity.setScale(1, RoundingMode.HALF_UP).toPlainString()
+            val quantityText = ingredient.quantity.toBigDecimalOrNull()?.let { number ->
+                number.multiply(BigDecimal(quantity))
+                    .setScale(1, RoundingMode.HALF_UP)
+                    .stripTrailingZeros()
+                    .toPlainString()
+            } ?: ingredient.quantity
 
             binding.tvIngredientQuantity.text = "$quantityText ${ingredient.unitOfMeasure}"
         }
