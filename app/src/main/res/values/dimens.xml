@@ -3,7 +3,9 @@
     <dimen name="margin_half">8dp</dimen>
     <dimen name="margin_quarter">4dp</dimen>
     <dimen name="margin_gap">2dp</dimen>
+    <dimen name="margin_portions">6dp</dimen>
     <dimen name="text_size_title">14sp</dimen>
+    <dimen name="text_size_portions">16sp</dimen>
     <dimen name="text_size_description">12sp</dimen>
     <dimen name="text_size_header">20sp</dimen>
     <dimen name="corner_radius_button">8dp</dimen>

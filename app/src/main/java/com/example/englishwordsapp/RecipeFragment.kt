@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.SeekBar
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.englishwordsapp.databinding.FragmentRecipeBinding
@@ -64,7 +65,8 @@ class RecipeFragment : Fragment() {
     }
 
     private fun initRecycler(recipe: Recipe) {
-        binding.rvIngredients.adapter = IngredientsAdapter(recipe.ingredients)
+        val ingredientsAdapter = IngredientsAdapter(recipe.ingredients)
+        binding.rvIngredients.adapter = ingredientsAdapter
         binding.rvIngredients.layoutManager = LinearLayoutManager(context)
         binding.rvIngredients.addItemDecoration(
             MaterialDividerItemDecoration(
@@ -91,6 +93,21 @@ class RecipeFragment : Fragment() {
                 dividerInsetEnd = resources.getDimensionPixelSize(R.dimen.padding_item)
             }
         )
+
+        binding.sbServings.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                binding.tvServingCount.text = progress.toString()
+                ingredientsAdapter.updateIngredients(progress)
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+            }
+        }
+        )
+
     }
 
     override fun onDestroyView() {

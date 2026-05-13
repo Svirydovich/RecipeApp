@@ -8,4 +8,5 @@
     <string name="ingredients">Ингредиенты</string>
     <string name="list_of_recipes">Список рецептов</string>
     <string name="cooking_method">Способ приготовления</string>
+    <string name="portions">Порции:</string>
 </resources>
