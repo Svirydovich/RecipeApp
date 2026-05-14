@@ -9,4 +9,5 @@
     <string name="list_of_recipes">Список рецептов</string>
     <string name="cooking_method">Способ приготовления</string>
     <string name="portions">Порции:</string>
+    <string name="add_to_favorites">Добавить в избранное</string>
 </resources>

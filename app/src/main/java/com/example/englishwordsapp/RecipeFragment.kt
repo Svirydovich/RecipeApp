@@ -19,6 +19,7 @@ class RecipeFragment : Fragment() {
         const val ARG_RECIPE = "arg_recipe"
     }
 
+    private var isFavorite = false
     private var _binding: FragmentRecipeBinding? = null
     private val binding get() = _binding!!
 
@@ -51,6 +52,12 @@ class RecipeFragment : Fragment() {
     private fun initUI(recipe: Recipe) {
         binding.tvRecipeName.text = recipe.title
         loadImageFromAssets(binding.ivRecipeImage, recipe.imageUrl)
+
+        binding.favoriteButton.setOnClickListener {
+            isFavorite = !isFavorite
+            val iconRes = if (isFavorite) R.drawable.ic_heart else R.drawable.ic_heart_empty
+            binding.favoriteButton.setImageResource(iconRes)
+        }
     }
 
     private fun loadImageFromAssets(imageView: ImageView, imageName: String) {
