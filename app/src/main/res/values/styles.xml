@@ -58,7 +58,7 @@
         <item name="android:textColor">@color/gray</item>
     </style>
 
-    <style name="styleSeekBar">
+    <style name="styleSeekBar" parent="Widget.AppCompat.SeekBar">
         <item name="android:thumb">@drawable/shape_seekbar_thumb</item>
         <item name="android:progressDrawable">@drawable/shape_seekbar_progress</item>
     </style>

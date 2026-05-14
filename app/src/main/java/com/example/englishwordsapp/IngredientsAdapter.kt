@@ -21,10 +21,6 @@ class IngredientsAdapter(private val ingredients: List<Ingredient>) :
         fun bind(ingredient: Ingredient, quantity: Int) {
             binding.tvIngredientName.text = ingredient.description
 
-            val baseQuantity = ingredient.quantity.toBigDecimalOrNull() ?: BigDecimal.ZERO
-
-            val totalQuantity = baseQuantity.multiply(BigDecimal(quantity))
-
             val quantityText = ingredient.quantity.toBigDecimalOrNull()?.let { number ->
                 number.multiply(BigDecimal(quantity))
                     .setScale(1, RoundingMode.HALF_UP)

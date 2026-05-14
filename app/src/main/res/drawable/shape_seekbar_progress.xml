@@ -2,7 +2,5 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
     <solid android:color="@color/purple_blue" />
     <corners android:radius="@dimen/margin_quarter" />
-    <size
-        android:width="@dimen/track_width"
-        android:height="@dimen/margin_main" />
+    <size android:height="@dimen/margin_main" />
 </shape>
