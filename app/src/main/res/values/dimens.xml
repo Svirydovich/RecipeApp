@@ -17,6 +17,6 @@
     <dimen name="item_recipe_layout_height">100dp</dimen>
     <dimen name="layout_margin_top">196dp</dimen>
     <dimen name="layout_margin_top_ingredients">140dp</dimen>
-    <dimen name="track_width">328dp</dimen>
+    <dimen name="heart">40dp</dimen>
     <dimen name="thumb_height">30dp</dimen>
 </resources>
