@@ -53,6 +53,7 @@ class RecipeFragment : Fragment() {
         binding.tvRecipeName.text = recipe.title
         loadImageFromAssets(binding.ivRecipeImage, recipe.imageUrl)
 
+        binding.favoriteButton.setImageResource(R.drawable.ic_heart_empty)
         binding.favoriteButton.setOnClickListener {
             isFavorite = !isFavorite
             val iconRes = if (isFavorite) R.drawable.ic_heart else R.drawable.ic_heart_empty
