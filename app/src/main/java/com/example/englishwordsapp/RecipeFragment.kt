@@ -1,5 +1,6 @@
 package com.example.englishwordsapp
 
+import android.content.Context
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -17,6 +18,8 @@ class RecipeFragment : Fragment() {
 
     companion object {
         const val ARG_RECIPE = "arg_recipe"
+        private const val PREFS_NAME = "recipe_prefs"
+        private const val FAVORITES_KEY = "favorites_set"
     }
 
     private var isFavorite = false
@@ -53,9 +56,26 @@ class RecipeFragment : Fragment() {
         binding.tvRecipeName.text = recipe.title
         loadImageFromAssets(binding.ivRecipeImage, recipe.imageUrl)
 
-        binding.favoriteButton.setImageResource(R.drawable.ic_heart_empty)
+        val favorites = getFavorites()
+
+        isFavorite = favorites.contains(recipe.id.toString())
+
+        val iconRes = if (isFavorite) R.drawable.ic_heart else R.drawable.ic_heart_empty
+        binding.favoriteButton.setImageResource(iconRes)
+
         binding.favoriteButton.setOnClickListener {
             isFavorite = !isFavorite
+
+            val currentFavorites = getFavorites()
+
+            if (isFavorite) {
+                currentFavorites.add(recipe.id.toString())
+            } else {
+                currentFavorites.remove(recipe.id.toString())
+            }
+
+            saveFavorites(currentFavorites)
+
             val iconRes = if (isFavorite) R.drawable.ic_heart else R.drawable.ic_heart_empty
             binding.favoriteButton.setImageResource(iconRes)
         }
@@ -121,5 +141,19 @@ class RecipeFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun getFavorites(): MutableSet<String> {
+        val sharedPrefs = requireContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        val favoritesSet = sharedPrefs.getStringSet(FAVORITES_KEY, emptySet()) ?: emptySet()
+        return HashSet(favoritesSet)
+    }
+
+    private fun saveFavorites(favorites: Set<String>) {
+        val sharedPrefs = requireContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        sharedPrefs.edit().apply {
+            putStringSet(FAVORITES_KEY, favorites)
+            apply()
+        }
     }
 }
