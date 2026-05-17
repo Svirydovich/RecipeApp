@@ -2,6 +2,7 @@
     <string name="app_name">RecipeApp</string>
     <string name="categories">Категории</string>
     <string name="favorites">Избранное</string>
+    <string name="no_favorites">Вы еще не добавили ни одного рецепта в избранное</string>
     <string name="category_icon_description">Обложка категории</string>
     <string name="header_image_description">Фоновое изображение с продуктами питания</string>
     <string name="recipe_image">Изображение рецепта</string>

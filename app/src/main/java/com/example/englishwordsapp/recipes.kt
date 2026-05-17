@@ -1,5 +1,6 @@
 package com.example.englishwordsapp
 
+import android.content.Context
 import com.example.englishwordsapp.model.Category
 import com.example.englishwordsapp.model.Ingredient
 import com.example.englishwordsapp.model.Recipe
@@ -70,5 +71,17 @@ object STUB {
 
     fun getRecipeById(recipeId: Int): Recipe? {
         return burgerRecipes.find { it.id == recipeId }
+    }
+
+    fun getFavorites(context: Context): Set<Int> {
+        val sharedPrefs = context.getSharedPreferences("recipe_prefs", Context.MODE_PRIVATE)
+        val favoritesSet = sharedPrefs.getStringSet("favorites_set", emptySet()) ?: emptySet()
+        return favoritesSet.map { it.toInt() }.toSet()
+    }
+
+    fun getRecipesByIds(ids: Set<Int>): List<Recipe> {
+        return burgerRecipes.filter { recipe ->
+            ids.contains(recipe.id)
+        }
     }
 }
