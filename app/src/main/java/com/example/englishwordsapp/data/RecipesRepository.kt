@@ -1,11 +1,17 @@
-package com.example.englishwordsapp
+package com.example.englishwordsapp.data
 
 import android.content.Context
 import com.example.englishwordsapp.model.Category
 import com.example.englishwordsapp.model.Ingredient
 import com.example.englishwordsapp.model.Recipe
 
-object STUB {
+class RecipesRepository(private val context: Context) {
+
+    companion object {
+        private const val PREFS_NAME = "recipe_prefs"
+        private const val FAVORITES_KEY = "favorites_set"
+    }
+
     private val categories = listOf(
         Category(0, "Бургеры", "Рецепты всех популярных видов бургеров", "burger.png"),
         Category(1, "Десерты", "Самые вкусные рецепты десертов специально для вас", "dessert.png"),
@@ -73,15 +79,35 @@ object STUB {
         return burgerRecipes.find { it.id == recipeId }
     }
 
-    fun getFavorites(context: Context): Set<Int> {
-        val sharedPrefs = context.getSharedPreferences("recipe_prefs", Context.MODE_PRIVATE)
-        val favoritesSet = sharedPrefs.getStringSet("favorites_set", emptySet()) ?: emptySet()
-        return favoritesSet.map { it.toInt() }.toSet()
+    fun getRecipesByIds(ids: Set<String>): List<Recipe> {
+        return burgerRecipes.filter { recipe ->
+            ids.contains(recipe.id.toString())
+        }
     }
 
-    fun getRecipesByIds(ids: Set<Int>): List<Recipe> {
-        return burgerRecipes.filter { recipe ->
-            ids.contains(recipe.id)
+    fun getFavorites(): MutableSet<String> {
+        val sharedPrefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        val favoritesSet = sharedPrefs.getStringSet(FAVORITES_KEY, emptySet()) ?: emptySet()
+        return HashSet(favoritesSet)
+    }
+
+    fun addToFavorites(recipeId: Int) {
+        val currentFavorites = getFavorites()
+        currentFavorites.add(recipeId.toString())
+        saveFavorites(currentFavorites)
+    }
+
+    fun removeFromFavorites(recipeId: Int) {
+        val currentFavorites = getFavorites()
+        currentFavorites.remove(recipeId.toString())
+        saveFavorites(currentFavorites)
+    }
+
+    private fun saveFavorites(favorites: Set<String>) {
+        val sharedPrefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        sharedPrefs.edit().apply {
+            putStringSet(FAVORITES_KEY, favorites)
+            apply()
         }
     }
 }

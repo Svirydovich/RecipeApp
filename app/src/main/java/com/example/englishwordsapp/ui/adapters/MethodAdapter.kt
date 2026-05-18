@@ -1,6 +1,5 @@
-package com.example.englishwordsapp
+package com.example.englishwordsapp.ui.adapters
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView

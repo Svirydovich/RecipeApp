@@ -1,4 +1,4 @@
-package com.example.englishwordsapp
+package com.example.englishwordsapp.ui
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
@@ -7,6 +7,9 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
+import com.example.englishwordsapp.ui.fragments.CategoriesListFragment
+import com.example.englishwordsapp.ui.fragments.FavoritesFragment
+import com.example.englishwordsapp.R
 import com.example.englishwordsapp.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
