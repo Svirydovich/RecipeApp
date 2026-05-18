@@ -1,4 +1,4 @@
-package com.example.englishwordsapp.ui.fragments
+package com.example.englishwordsapp.ui.fragments.categories
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,11 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
-import com.example.englishwordsapp.databinding.FragmentListCategoriesBinding
 import androidx.fragment.app.replace
 import com.example.englishwordsapp.R
 import com.example.englishwordsapp.data.RecipesRepository
+import com.example.englishwordsapp.databinding.FragmentListCategoriesBinding
 import com.example.englishwordsapp.ui.adapters.CategoriesListAdapter
+import com.example.englishwordsapp.ui.fragments.recipes.recipes_list.RecipesListFragment
 
 class CategoriesListFragment : Fragment() {
 

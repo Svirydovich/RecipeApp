@@ -1,4 +1,4 @@
-package com.example.englishwordsapp.ui.fragments
+package com.example.englishwordsapp.ui.fragments.recipes.recipe
 
 import android.graphics.BitmapFactory
 import android.os.Build
