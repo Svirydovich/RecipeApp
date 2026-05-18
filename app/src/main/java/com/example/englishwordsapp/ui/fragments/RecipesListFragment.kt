@@ -1,4 +1,4 @@
-package com.example.englishwordsapp
+package com.example.englishwordsapp.ui.fragments
 
 import android.graphics.BitmapFactory
 import android.os.Bundle
@@ -10,7 +10,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.englishwordsapp.R
+import com.example.englishwordsapp.data.RecipesRepository
 import com.example.englishwordsapp.databinding.FragmentRecipesListBinding
+import com.example.englishwordsapp.ui.adapters.RecipeAdapter
 
 class RecipesListFragment : Fragment() {
 
@@ -20,6 +23,7 @@ class RecipesListFragment : Fragment() {
     private var categoryId: Int? = null
     private var categoryName: String? = null
     private var categoryImageUrl: String? = null
+    private lateinit var repository: RecipesRepository
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -27,6 +31,7 @@ class RecipesListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentRecipesListBinding.inflate(inflater, container, false)
+        repository = RecipesRepository(requireContext())
         return binding.root
     }
 
@@ -40,7 +45,7 @@ class RecipesListFragment : Fragment() {
         binding.tvRecipesTitle.text = categoryName
         categoryImageUrl?.let { loadImageFromAssets(binding.ivCategoryImage, it) }
 
-        val recipes = STUB.getRecipesByCategoryId(categoryId ?: 0)
+        val recipes = repository.getRecipesByCategoryId(categoryId ?: 0)
 
         val recipeAdapter = RecipeAdapter(recipes, { recipeId ->
             openRecipeByRecipeId(recipeId)
@@ -69,7 +74,7 @@ class RecipesListFragment : Fragment() {
     }
 
     private fun openRecipeByRecipeId(recipeId: Int) {
-        val recipe = STUB.getRecipeById(recipeId)
+        val recipe = repository.getRecipeById(recipeId)
 
         if (recipe != null) {
             val bundle = Bundle().apply {

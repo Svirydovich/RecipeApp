@@ -1,7 +1,7 @@
-package com.example.englishwordsapp
+package com.example.englishwordsapp.ui.fragments
 
-import android.content.Context
 import android.graphics.BitmapFactory
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,21 +10,24 @@ import android.widget.ImageView
 import android.widget.SeekBar
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.englishwordsapp.R
+import com.example.englishwordsapp.data.RecipesRepository
 import com.example.englishwordsapp.databinding.FragmentRecipeBinding
 import com.example.englishwordsapp.model.Recipe
+import com.example.englishwordsapp.ui.adapters.IngredientsAdapter
+import com.example.englishwordsapp.ui.adapters.MethodAdapter
 import com.google.android.material.divider.MaterialDividerItemDecoration
 
 class RecipeFragment : Fragment() {
 
     companion object {
         const val ARG_RECIPE = "arg_recipe"
-        private const val PREFS_NAME = "recipe_prefs"
-        private const val FAVORITES_KEY = "favorites_set"
     }
 
     private var isFavorite = false
     private var _binding: FragmentRecipeBinding? = null
     private val binding get() = _binding!!
+    private lateinit var repository: RecipesRepository
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -32,6 +35,7 @@ class RecipeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentRecipeBinding.inflate(inflater, container, false)
+        repository = RecipesRepository(requireContext())
         return binding.root
     }
 
@@ -39,7 +43,7 @@ class RecipeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val recipe =
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 arguments?.getParcelable(ARG_RECIPE, Recipe::class.java)
             } else {
                 @Suppress("DEPRECATION")
@@ -56,7 +60,7 @@ class RecipeFragment : Fragment() {
         binding.tvRecipeName.text = recipe.title
         loadImageFromAssets(binding.ivRecipeImage, recipe.imageUrl)
 
-        val favorites = getFavorites()
+        val favorites = repository.getFavorites()
 
         isFavorite = favorites.contains(recipe.id.toString())
 
@@ -66,15 +70,11 @@ class RecipeFragment : Fragment() {
         binding.favoriteButton.setOnClickListener {
             isFavorite = !isFavorite
 
-            val currentFavorites = getFavorites()
-
             if (isFavorite) {
-                currentFavorites.add(recipe.id.toString())
+                repository.addToFavorites(recipe.id)
             } else {
-                currentFavorites.remove(recipe.id.toString())
+                repository.removeFromFavorites(recipe.id)
             }
-
-            saveFavorites(currentFavorites)
 
             val iconRes = if (isFavorite) R.drawable.ic_heart else R.drawable.ic_heart_empty
             binding.favoriteButton.setImageResource(iconRes)
@@ -143,17 +143,4 @@ class RecipeFragment : Fragment() {
         _binding = null
     }
 
-    private fun getFavorites(): MutableSet<String> {
-        val sharedPrefs = requireContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-        val favoritesSet = sharedPrefs.getStringSet(FAVORITES_KEY, emptySet()) ?: emptySet()
-        return HashSet(favoritesSet)
-    }
-
-    private fun saveFavorites(favorites: Set<String>) {
-        val sharedPrefs = requireContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-        sharedPrefs.edit().apply {
-            putStringSet(FAVORITES_KEY, favorites)
-            apply()
-        }
-    }
 }

@@ -1,4 +1,4 @@
-package com.example.englishwordsapp
+package com.example.englishwordsapp.ui.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,6 +8,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import com.example.englishwordsapp.databinding.FragmentListCategoriesBinding
 import androidx.fragment.app.replace
+import com.example.englishwordsapp.R
+import com.example.englishwordsapp.data.RecipesRepository
+import com.example.englishwordsapp.ui.adapters.CategoriesListAdapter
 
 class CategoriesListFragment : Fragment() {
 
@@ -19,6 +22,7 @@ class CategoriesListFragment : Fragment() {
 
     private var _binding: FragmentListCategoriesBinding? = null
     private val binding get() = _binding!!
+    private lateinit var repository: RecipesRepository
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -26,6 +30,7 @@ class CategoriesListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentListCategoriesBinding.inflate(inflater, container, false)
+        repository = RecipesRepository(requireContext())
         return binding.root
     }
 
@@ -40,7 +45,7 @@ class CategoriesListFragment : Fragment() {
     }
 
     private fun initRecycler() {
-        val categories = STUB.getCategories()
+        val categories = repository.getCategories()
         val categoriesAdapter = CategoriesListAdapter(categories)
 
         binding.rvCategories.adapter = categoriesAdapter
@@ -54,20 +59,19 @@ class CategoriesListFragment : Fragment() {
     }
 
     private fun openRecipesByCategoryId(categoryId: Int) {
-        val category = STUB.getCategories().find { it.id == categoryId }
+        val category = repository.getCategories().find { it.id == categoryId }
 
-        val categoryName = category?.title ?: ""
-        val categoryImageUrl = category?.imageUrl ?: ""
+        if (category != null) {
+            val bundle = Bundle().apply {
+                putInt(ARG_CATEGORY_ID, categoryId)
+                putString(ARG_CATEGORY_NAME, category.title)
+                putString(ARG_CATEGORY_IMAGE_URL, category.imageUrl)
+            }
 
-        val bundle = Bundle().apply {
-            putInt(ARG_CATEGORY_ID, categoryId)
-            putString(ARG_CATEGORY_NAME, categoryName)
-            putString(ARG_CATEGORY_IMAGE_URL, categoryImageUrl)
-        }
-
-        parentFragmentManager.commit {
-            replace<RecipesListFragment>(R.id.mainContainer, args = bundle)
-            addToBackStack(null)
+            parentFragmentManager.commit {
+                replace<RecipesListFragment>(R.id.mainContainer, args = bundle)
+                addToBackStack(null)
+            }
         }
     }
 }

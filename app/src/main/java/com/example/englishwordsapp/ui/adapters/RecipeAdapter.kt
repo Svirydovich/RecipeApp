@@ -1,5 +1,6 @@
-package com.example.englishwordsapp
+package com.example.englishwordsapp.ui.adapters
 
+import android.content.Context
 import android.graphics.BitmapFactory
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -11,7 +12,7 @@ import com.example.englishwordsapp.model.Recipe
 class RecipeAdapter(
     private val recipes: List<Recipe>,
     private val onRecipeClick: (recipeId: Int) -> Unit,
-    private val context: android.content.Context
+    private val context: Context
 ) : RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder>() {
 
     inner class RecipeViewHolder(private val binding: ItemRecipeBinding) :

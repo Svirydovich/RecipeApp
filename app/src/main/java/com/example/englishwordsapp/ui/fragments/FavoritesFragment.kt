@@ -1,4 +1,4 @@
-package com.example.englishwordsapp
+package com.example.englishwordsapp.ui.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,12 +8,16 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.englishwordsapp.R
+import com.example.englishwordsapp.data.RecipesRepository
 import com.example.englishwordsapp.databinding.FragmentFavoritesBinding
+import com.example.englishwordsapp.ui.adapters.RecipeAdapter
 
 class FavoritesFragment : Fragment() {
 
     private var _binding: FragmentFavoritesBinding? = null
     private val binding get() = _binding!!
+    private lateinit var repository: RecipesRepository
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -21,6 +25,7 @@ class FavoritesFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentFavoritesBinding.inflate(inflater, container, false)
+        repository = RecipesRepository(requireContext())
         return binding.root
     }
 
@@ -30,7 +35,7 @@ class FavoritesFragment : Fragment() {
     }
 
     private fun openRecipeByRecipeId(recipeId: Int) {
-        val recipe = STUB.getRecipeById(recipeId)
+        val recipe = repository.getRecipeById(recipeId)
 
         if (recipe != null) {
             val bundle = Bundle().apply {
@@ -45,9 +50,9 @@ class FavoritesFragment : Fragment() {
     }
 
     private fun initRecycler() {
-        val favoriteIds = STUB.getFavorites(requireContext())
+        val favoriteIds = repository.getFavorites()
 
-        val favoriteRecipes = STUB.getRecipesByIds(favoriteIds)
+        val favoriteRecipes = repository.getRecipesByIds(favoriteIds)
 
         val recipeAdapter = RecipeAdapter(favoriteRecipes, { recipeId ->
             openRecipeByRecipeId(recipeId)

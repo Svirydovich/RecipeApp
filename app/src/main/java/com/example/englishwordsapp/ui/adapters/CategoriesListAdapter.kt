@@ -1,4 +1,4 @@
-package com.example.englishwordsapp
+package com.example.englishwordsapp.ui.adapters
 
 import android.graphics.drawable.Drawable
 import android.util.Log
