@@ -1,4 +1,4 @@
-package com.example.englishwordsapp.ui.fragments
+package com.example.englishwordsapp.ui.fragments.recipes.favorites
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,6 +12,7 @@ import com.example.englishwordsapp.R
 import com.example.englishwordsapp.data.RecipesRepository
 import com.example.englishwordsapp.databinding.FragmentFavoritesBinding
 import com.example.englishwordsapp.ui.adapters.RecipeAdapter
+import com.example.englishwordsapp.ui.fragments.recipes.recipe.RecipeFragment
 
 class FavoritesFragment : Fragment() {
 

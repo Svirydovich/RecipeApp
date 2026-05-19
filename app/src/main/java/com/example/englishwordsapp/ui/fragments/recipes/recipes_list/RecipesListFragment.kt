@@ -1,4 +1,4 @@
-package com.example.englishwordsapp.ui.fragments
+package com.example.englishwordsapp.ui.fragments.recipes.recipes_list
 
 import android.graphics.BitmapFactory
 import android.os.Bundle
@@ -14,6 +14,8 @@ import com.example.englishwordsapp.R
 import com.example.englishwordsapp.data.RecipesRepository
 import com.example.englishwordsapp.databinding.FragmentRecipesListBinding
 import com.example.englishwordsapp.ui.adapters.RecipeAdapter
+import com.example.englishwordsapp.ui.fragments.categories.CategoriesListFragment
+import com.example.englishwordsapp.ui.fragments.recipes.recipe.RecipeFragment
 
 class RecipesListFragment : Fragment() {
 
