@@ -80,7 +80,7 @@ class RecipesListFragment : Fragment() {
 
         if (recipe != null) {
             val bundle = Bundle().apply {
-                putParcelable(RecipeFragment.ARG_RECIPE, recipe)
+                putInt(RecipeFragment.ARG_RECIPE_ID, recipeId)
             }
 
             parentFragmentManager.commit {

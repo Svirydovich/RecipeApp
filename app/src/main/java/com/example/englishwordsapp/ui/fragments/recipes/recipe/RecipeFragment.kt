@@ -23,7 +23,7 @@ import com.google.android.material.divider.MaterialDividerItemDecoration
 class RecipeFragment : Fragment() {
 
     companion object {
-        const val ARG_RECIPE = "arg_recipe"
+        const val ARG_RECIPE_ID = "arg_recipe"
     }
 
     private val viewModel: RecipeViewModel by viewModels()
@@ -45,12 +45,16 @@ class RecipeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val recipeId = arguments?.getInt(RecipeFragment.ARG_RECIPE_ID) ?: return
+
+        viewModel.loadRecipe(recipeId)
+
         val recipe =
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                arguments?.getParcelable(ARG_RECIPE, Recipe::class.java)
+                arguments?.getParcelable(ARG_RECIPE_ID, Recipe::class.java)
             } else {
                 @Suppress("DEPRECATION")
-                (arguments?.getParcelable(ARG_RECIPE))
+                (arguments?.getParcelable(ARG_RECIPE_ID))
             }
 
         if (recipe != null) {
