@@ -3,12 +3,14 @@ package com.example.englishwordsapp.ui.fragments.recipes.recipe
 import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.SeekBar
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.englishwordsapp.R
 import com.example.englishwordsapp.data.RecipesRepository
@@ -24,6 +26,7 @@ class RecipeFragment : Fragment() {
         const val ARG_RECIPE = "arg_recipe"
     }
 
+    private val viewModel: RecipeViewModel by viewModels()
     private var isFavorite = false
     private var _binding: FragmentRecipeBinding? = null
     private val binding get() = _binding!!
@@ -54,6 +57,12 @@ class RecipeFragment : Fragment() {
             initUI(recipe)
             initRecycler(recipe)
         }
+
+        viewModel.recipeState.observe(viewLifecycleOwner) { state ->
+            Log.d("RecipeFragment", "isFavorites: ${state.isFavorites}")
+            val iconRes = if (state.isFavorites) R.drawable.ic_heart else R.drawable.ic_heart_empty
+            binding.favoriteButton.setImageResource(iconRes)
+        }
     }
 
     private fun initUI(recipe: Recipe) {
@@ -64,20 +73,10 @@ class RecipeFragment : Fragment() {
 
         isFavorite = favorites.contains(recipe.id.toString())
 
-        val iconRes = if (isFavorite) R.drawable.ic_heart else R.drawable.ic_heart_empty
-        binding.favoriteButton.setImageResource(iconRes)
+        viewModel.initializeRecipe(recipe, isFavorite)
 
         binding.favoriteButton.setOnClickListener {
-            isFavorite = !isFavorite
-
-            if (isFavorite) {
-                repository.addToFavorites(recipe.id)
-            } else {
-                repository.removeFromFavorites(recipe.id)
-            }
-
-            val iconRes = if (isFavorite) R.drawable.ic_heart else R.drawable.ic_heart_empty
-            binding.favoriteButton.setImageResource(iconRes)
+            viewModel.toggleFavorite()
         }
     }
 
