@@ -12,7 +12,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.englishwordsapp.R
-import com.example.englishwordsapp.data.RecipesRepository
 import com.example.englishwordsapp.databinding.FragmentRecipeBinding
 import com.example.englishwordsapp.model.Recipe
 import com.example.englishwordsapp.ui.adapters.IngredientsAdapter
@@ -29,7 +28,6 @@ class RecipeFragment : Fragment() {
     private val viewModel: RecipeViewModel by viewModels()
     private var _binding: FragmentRecipeBinding? = null
     private val binding get() = _binding!!
-    private lateinit var repository: RecipesRepository
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,7 +35,6 @@ class RecipeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentRecipeBinding.inflate(inflater, container, false)
-        repository = RecipesRepository(requireContext())
         return binding.root
     }
 

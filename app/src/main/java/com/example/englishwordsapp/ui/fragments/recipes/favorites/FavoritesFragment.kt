@@ -40,7 +40,7 @@ class FavoritesFragment : Fragment() {
 
         if (recipe != null) {
             val bundle = Bundle().apply {
-                putParcelable(RecipeFragment.ARG_RECIPE, recipe)
+                putParcelable(RecipeFragment.ARG_RECIPE_ID, recipe)
             }
 
             parentFragmentManager.commit {
