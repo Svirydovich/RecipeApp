@@ -1,12 +1,10 @@
 package com.example.englishwordsapp.ui.fragments.recipes.recipe
 
-import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.SeekBar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -50,6 +48,8 @@ class RecipeFragment : Fragment() {
             val iconRes = if (state.isFavorites) R.drawable.ic_heart else R.drawable.ic_heart_empty
             binding.favoriteButton.setImageResource(iconRes)
 
+            binding.ivRecipeImage.setImageDrawable(state.recipeImage)
+
             state.recipe?.let { recipe ->
                 if (ingredientsAdapter == null) {
                     initRecycler(recipe)
@@ -65,18 +65,6 @@ class RecipeFragment : Fragment() {
 
     private fun initUI(recipe: Recipe) {
         binding.tvRecipeName.text = recipe.title
-        loadImageFromAssets(binding.ivRecipeImage, recipe.imageUrl)
-    }
-
-    private fun loadImageFromAssets(imageView: ImageView, imageName: String) {
-        try {
-            val inputStream = requireContext().assets.open(imageName)
-            val bitmap = BitmapFactory.decodeStream(inputStream)
-            imageView.setImageBitmap(bitmap)
-            inputStream.close()
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
     }
 
     private fun initRecycler(recipe: Recipe) {
