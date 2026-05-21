@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.englishwordsapp.data.RecipesRepository
 import com.example.englishwordsapp.model.Recipe
+import androidx.core.content.edit
 
 data class RecipeState(
     val recipe: Recipe? = null,
@@ -31,6 +32,7 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
                 isFavorites = isFavorite,
                 servings = _recipeState.value?.servings ?: 1
             )
+            // TODO: load from network
         }
 
     }
@@ -45,8 +47,11 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
 
     fun toggleFavorite() {
         val currentState = _recipeState.value ?: RecipeState()
-        val newState = currentState.copy(isFavorites = !currentState.isFavorites)
-        _recipeState.value = newState
+        val recipe = currentState.recipe ?: return
+        val newIsFavorite = !currentState.isFavorites
+
+        _recipeState.value = currentState.copy(isFavorites = newIsFavorite)
+        saveFavorites(recipe.id, newIsFavorite)
     }
 
     private fun saveFavorites(recipeId: Int, isFavorite: Boolean) {
@@ -59,9 +64,7 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
             favorites.remove(recipeId.toString())
         }
 
-        prefs.edit().putStringSet("favorite_recipes", favorites).apply()
+        prefs.edit { putStringSet("favorite_recipes", favorites) }
     }
-    fun initializeRecipe(recipe: Recipe, isFavorite: Boolean) {
-        _recipeState.value = RecipeState(recipe = recipe, isFavorites = isFavorite)
-    }
+
 }

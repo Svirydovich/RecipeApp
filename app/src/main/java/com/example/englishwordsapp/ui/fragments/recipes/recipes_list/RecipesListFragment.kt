@@ -76,17 +76,13 @@ class RecipesListFragment : Fragment() {
     }
 
     private fun openRecipeByRecipeId(recipeId: Int) {
-        val recipe = repository.getRecipeById(recipeId)
+        val bundle = Bundle().apply {
+            putInt(RecipeFragment.ARG_RECIPE_ID, recipeId)
+        }
 
-        if (recipe != null) {
-            val bundle = Bundle().apply {
-                putInt(RecipeFragment.ARG_RECIPE_ID, recipeId)
-            }
-
-            parentFragmentManager.commit {
-                replace<RecipeFragment>(R.id.mainContainer, args = bundle)
-                addToBackStack(null)
-            }
+        parentFragmentManager.commit {
+            replace<RecipeFragment>(R.id.mainContainer, args = bundle)
+            addToBackStack(null)
         }
     }
 }
