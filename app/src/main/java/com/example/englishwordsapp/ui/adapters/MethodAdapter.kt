@@ -5,13 +5,13 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.englishwordsapp.databinding.ItemMethodBinding
 
-class MethodAdapter(private val steps: List<String>) :
-    RecyclerView.Adapter<MethodAdapter.MethodViewHolder>() {
+class MethodAdapter : RecyclerView.Adapter<MethodAdapter.MethodViewHolder>() {
+    var steps: List<String> = emptyList()
 
     class MethodViewHolder(private val binding: ItemMethodBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-            fun bind(step: String) {
+        fun bind(step: String) {
             binding.tvMethodStep.text = step
         }
     }
