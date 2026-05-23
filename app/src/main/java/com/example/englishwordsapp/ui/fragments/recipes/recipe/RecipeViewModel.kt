@@ -82,4 +82,9 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
         prefs.edit { putStringSet("favorite_recipes", favorites) }
     }
 
+    fun updatePortions(newServings: Int) {
+        val currentState = _recipeState.value ?: return
+
+        _recipeState.value = currentState.copy(servings = newServings)
+    }
 }

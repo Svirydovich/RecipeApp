@@ -11,7 +11,6 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.englishwordsapp.R
 import com.example.englishwordsapp.databinding.FragmentRecipeBinding
-import com.example.englishwordsapp.model.Recipe
 import com.example.englishwordsapp.ui.adapters.IngredientsAdapter
 import com.example.englishwordsapp.ui.adapters.MethodAdapter
 import com.google.android.material.divider.MaterialDividerItemDecoration
@@ -43,6 +42,15 @@ class RecipeFragment : Fragment() {
 
         viewModel.loadRecipe(recipeId)
 
+        binding.sbServings.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                if (fromUser) viewModel.updatePortions(progress + 1)
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+        })
+
         viewModel.recipeState.observe(viewLifecycleOwner) { state ->
             Log.d("RecipeFragment", "isFavorites: ${state.isFavorites}")
             val iconRes = if (state.isFavorites) R.drawable.ic_heart else R.drawable.ic_heart_empty
@@ -50,11 +58,8 @@ class RecipeFragment : Fragment() {
 
             binding.ivRecipeImage.setImageDrawable(state.recipeImage)
 
-            state.recipe?.let { recipe ->
-                if (ingredientsAdapter == null) {
-                    initRecycler(recipe)
-                }
-                initUI(recipe)
+            state.recipe?.let {
+                initUI(state)
             }
         }
 
@@ -63,54 +68,37 @@ class RecipeFragment : Fragment() {
         }
     }
 
-    private fun initUI(recipe: Recipe) {
-        binding.tvRecipeName.text = recipe.title
-    }
+    private fun initUI(recipeState: RecipeState) {
+        binding.tvRecipeName.text = recipeState.recipe?.title
+        binding.tvServingCount.text = recipeState.servings.toString()
 
-    private fun initRecycler(recipe: Recipe) {
-        ingredientsAdapter = IngredientsAdapter(recipe.ingredients)
+        ingredientsAdapter = IngredientsAdapter(recipeState.recipe?.ingredients ?: emptyList())
         binding.rvIngredients.adapter = ingredientsAdapter
+        ingredientsAdapter?.updateIngredients(recipeState.servings)
         binding.rvIngredients.layoutManager = LinearLayoutManager(context)
         binding.rvIngredients.addItemDecoration(
-            MaterialDividerItemDecoration(
-                requireContext(),
-                MaterialDividerItemDecoration.VERTICAL
-            ).apply {
-                isLastItemDecorated = false
-                setDividerColorResource(requireContext(), R.color.dark_white)
-                dividerInsetStart = resources.getDimensionPixelSize(R.dimen.padding_item)
-                dividerInsetEnd = resources.getDimensionPixelSize(R.dimen.padding_item)
-            }
+            MaterialDividerItemDecoration(requireContext(), MaterialDividerItemDecoration.VERTICAL)
+                .apply {
+                    isLastItemDecorated = false
+                    setDividerColorResource(requireContext(), R.color.dark_white)
+                    dividerInsetStart = resources.getDimensionPixelSize(R.dimen.padding_item)
+                    dividerInsetEnd = resources.getDimensionPixelSize(R.dimen.padding_item)
+                }
         )
 
-        binding.rvMethod.adapter = MethodAdapter(recipe.method)
+        binding.rvMethod.adapter = MethodAdapter(recipeState.recipe?.method ?: emptyList())
         binding.rvMethod.layoutManager = LinearLayoutManager(context)
         binding.rvMethod.addItemDecoration(
-            MaterialDividerItemDecoration(
-                requireContext(),
-                MaterialDividerItemDecoration.VERTICAL
-            ).apply {
-                isLastItemDecorated = false
-                setDividerColorResource(requireContext(), R.color.dark_white)
-                dividerInsetStart = resources.getDimensionPixelSize(R.dimen.padding_item)
-                dividerInsetEnd = resources.getDimensionPixelSize(R.dimen.padding_item)
-            }
+            MaterialDividerItemDecoration(requireContext(), MaterialDividerItemDecoration.VERTICAL)
+                .apply {
+                    isLastItemDecorated = false
+                    setDividerColorResource(requireContext(), R.color.dark_white)
+                    dividerInsetStart = resources.getDimensionPixelSize(R.dimen.padding_item)
+                    dividerInsetEnd = resources.getDimensionPixelSize(R.dimen.padding_item)
+                }
         )
 
-        binding.sbServings.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                binding.tvServingCount.text = progress.toString()
-                ingredientsAdapter?.updateIngredients(progress)
-            }
-
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {
-            }
-
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {
-            }
-        }
-        )
-
+        binding.sbServings.progress = recipeState.servings - 1
     }
 
     override fun onDestroyView() {
