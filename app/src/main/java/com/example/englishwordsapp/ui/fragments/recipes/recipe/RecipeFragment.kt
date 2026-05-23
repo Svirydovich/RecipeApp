@@ -74,6 +74,7 @@ class RecipeFragment : Fragment() {
 
         ingredientsAdapter = IngredientsAdapter(recipeState.recipe?.ingredients ?: emptyList())
         binding.rvIngredients.adapter = ingredientsAdapter
+        ingredientsAdapter?.updateIngredients(recipeState.servings)
         binding.rvIngredients.layoutManager = LinearLayoutManager(context)
         binding.rvIngredients.addItemDecoration(
             MaterialDividerItemDecoration(requireContext(), MaterialDividerItemDecoration.VERTICAL)
