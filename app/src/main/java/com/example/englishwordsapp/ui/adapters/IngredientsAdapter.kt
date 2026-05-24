@@ -9,9 +9,8 @@ import com.example.englishwordsapp.model.Ingredient
 import java.math.BigDecimal
 import java.math.RoundingMode
 
-class IngredientsAdapter(private val ingredients: List<Ingredient>) :
-    RecyclerView.Adapter<IngredientsAdapter.IngredientViewHolder>() {
-
+class IngredientsAdapter : RecyclerView.Adapter<IngredientsAdapter.IngredientViewHolder>() {
+    var ingredients: List<Ingredient> = emptyList()
     private var quantity = 1
 
     class IngredientViewHolder(private val binding: ItemIngredientBinding) :
@@ -21,12 +20,10 @@ class IngredientsAdapter(private val ingredients: List<Ingredient>) :
         fun bind(ingredient: Ingredient, quantity: Int) {
             binding.tvIngredientName.text = ingredient.description
 
-            val quantityText = ingredient.quantity.toBigDecimalOrNull()?.let { number ->
-                number.multiply(BigDecimal(quantity))
-                    .setScale(1, RoundingMode.HALF_UP)
-                    .stripTrailingZeros()
-                    .toPlainString()
-            } ?: ingredient.quantity
+            val quantityText =
+                ingredient.quantity.toBigDecimalOrNull()?.multiply(BigDecimal(quantity))
+                    ?.setScale(1, RoundingMode.HALF_UP)?.stripTrailingZeros()?.toPlainString()
+                    ?: ingredient.quantity
 
             binding.tvIngredientQuantity.text = "$quantityText ${ingredient.unitOfMeasure}"
         }
@@ -44,6 +41,7 @@ class IngredientsAdapter(private val ingredients: List<Ingredient>) :
 
     override fun getItemCount(): Int = ingredients.size
 
+    @SuppressLint("NotifyDataSetChanged")
     fun updateIngredients(newQuantity: Int) {
         quantity = newQuantity
         notifyDataSetChanged()
