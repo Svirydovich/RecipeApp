@@ -8,8 +8,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.englishwordsapp.databinding.ItemCategoryBinding
 import com.example.englishwordsapp.model.Category
 
-class CategoriesListAdapter(private val dataSet: List<Category>) :
+class CategoriesListAdapter(var categories: List<Category> = emptyList()) :
     RecyclerView.Adapter<CategoriesListAdapter.ViewHolder>() {
+
     interface OnItemClickListener {
         fun onItemClick(categoryId: Int)
     }
@@ -44,11 +45,11 @@ class CategoriesListAdapter(private val dataSet: List<Category>) :
     }
 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-        viewHolder.bind(dataSet[position])
+        viewHolder.bind(categories[position])
         viewHolder.itemView.setOnClickListener {
-            itemClickListener?.onItemClick(dataSet[position].id)
+            itemClickListener?.onItemClick(categories[position].id)
         }
     }
 
-    override fun getItemCount() = dataSet.size
+    override fun getItemCount() = categories.size
 }

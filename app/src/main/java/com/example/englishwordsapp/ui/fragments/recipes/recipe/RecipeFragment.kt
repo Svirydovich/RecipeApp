@@ -102,7 +102,6 @@ class RecipeFragment : Fragment() {
         binding.tvRecipeName.text = recipeState.recipe?.title
         binding.tvServingCount.text = recipeState.servings.toString()
 
-        // ← обновляем данные в адаптерах вместо создания новых
         ingredientsAdapter.ingredients = recipeState.recipe?.ingredients ?: emptyList()
         ingredientsAdapter.updateIngredients(recipeState.servings)
 
