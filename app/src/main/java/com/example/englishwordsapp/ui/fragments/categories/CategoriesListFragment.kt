@@ -1,5 +1,6 @@
 package com.example.englishwordsapp.ui.fragments.categories
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,8 +8,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
+import androidx.fragment.app.viewModels
 import com.example.englishwordsapp.R
-import com.example.englishwordsapp.data.RecipesRepository
 import com.example.englishwordsapp.databinding.FragmentListCategoriesBinding
 import com.example.englishwordsapp.ui.adapters.CategoriesListAdapter
 import com.example.englishwordsapp.ui.fragments.recipes.recipes_list.RecipesListFragment
@@ -23,7 +24,8 @@ class CategoriesListFragment : Fragment() {
 
     private var _binding: FragmentListCategoriesBinding? = null
     private val binding get() = _binding!!
-    private lateinit var repository: RecipesRepository
+    private val viewModel: CategoriesListViewModel by viewModels()
+    private lateinit var categoriesAdapter: CategoriesListAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -31,23 +33,18 @@ class CategoriesListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentListCategoriesBinding.inflate(inflater, container, false)
-        repository = RecipesRepository(requireContext())
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initRecycler()
+        setupRecyclerView()
+
+        viewModel.state.observe(viewLifecycleOwner) { state -> updateUI(state) }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
-    private fun initRecycler() {
-        val categories = repository.getCategories()
-        val categoriesAdapter = CategoriesListAdapter(categories)
+    private fun setupRecyclerView() {
+        categoriesAdapter = CategoriesListAdapter(emptyList())
 
         binding.rvCategories.adapter = categoriesAdapter
 
@@ -59,8 +56,19 @@ class CategoriesListFragment : Fragment() {
         })
     }
 
+    @SuppressLint("NotifyDataSetChanged")
+    private fun updateUI(state: CategoriesListState) {
+        categoriesAdapter.categories = state.categories
+        categoriesAdapter.notifyDataSetChanged()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     private fun openRecipesByCategoryId(categoryId: Int) {
-        val category = repository.getCategories().find { it.id == categoryId }
+        val category = viewModel.getCategoryById(categoryId)
 
         if (category != null) {
             val bundle = Bundle().apply {

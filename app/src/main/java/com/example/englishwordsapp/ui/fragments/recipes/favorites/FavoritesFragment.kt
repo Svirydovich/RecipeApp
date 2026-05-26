@@ -1,5 +1,6 @@
 package com.example.englishwordsapp.ui.fragments.recipes.favorites
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,9 +8,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.englishwordsapp.R
-import com.example.englishwordsapp.data.RecipesRepository
 import com.example.englishwordsapp.databinding.FragmentFavoritesBinding
 import com.example.englishwordsapp.ui.adapters.RecipeAdapter
 import com.example.englishwordsapp.ui.fragments.recipes.recipe.RecipeFragment
@@ -18,7 +19,8 @@ class FavoritesFragment : Fragment() {
 
     private var _binding: FragmentFavoritesBinding? = null
     private val binding get() = _binding!!
-    private lateinit var repository: RecipesRepository
+    private val viewModel: FavoritesViewModel by viewModels()
+    private lateinit var recipeAdapter: RecipeAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -26,36 +28,19 @@ class FavoritesFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentFavoritesBinding.inflate(inflater, container, false)
-        repository = RecipesRepository(requireContext())
         return binding.root
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        setupRecyclerView()
+
+        viewModel.state.observe(viewLifecycleOwner) { state -> updateUI(state) }
     }
 
-    private fun openRecipeByRecipeId(recipeId: Int) {
-        val recipe = repository.getRecipeById(recipeId)
-
-        if (recipe != null) {
-            val bundle = Bundle().apply {
-                putParcelable(RecipeFragment.ARG_RECIPE_ID, recipe)
-            }
-
-            parentFragmentManager.commit {
-                replace<RecipeFragment>(R.id.mainContainer, args = bundle)
-                addToBackStack(null)
-            }
-        }
-    }
-
-    private fun initRecycler() {
-        val favoriteIds = repository.getFavorites()
-
-        val favoriteRecipes = repository.getRecipesByIds(favoriteIds)
-
-        val recipeAdapter = RecipeAdapter(favoriteRecipes, { recipeId ->
+    private fun setupRecyclerView() {
+        recipeAdapter = RecipeAdapter(emptyList(), { recipeId ->
             openRecipeByRecipeId(recipeId)
         }, requireContext())
 
@@ -63,8 +48,14 @@ class FavoritesFragment : Fragment() {
             adapter = recipeAdapter
             layoutManager = LinearLayoutManager(requireContext())
         }
+    }
 
-        if (favoriteRecipes.isEmpty()) {
+    @SuppressLint("NotifyDataSetChanged")
+    private fun updateUI(state: FavoritesState) {
+        recipeAdapter.recipes = state.recipes
+        recipeAdapter.notifyDataSetChanged()
+
+        if (state.isEmpty) {
             binding.rvFavorites.visibility = View.GONE
             binding.tvEmptyState.visibility = View.VISIBLE
         } else {
@@ -73,10 +64,20 @@ class FavoritesFragment : Fragment() {
         }
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 
-        initRecycler()
+    private fun openRecipeByRecipeId(recipeId: Int) {
+        val bundle = Bundle().apply {
+            putInt(RecipeFragment.ARG_RECIPE_ID, recipeId)
+        }
+
+        parentFragmentManager.commit {
+            replace<RecipeFragment>(R.id.mainContainer, args = bundle)
+            addToBackStack(null)
+        }
     }
 
 }

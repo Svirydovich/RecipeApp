@@ -1,17 +1,16 @@
 package com.example.englishwordsapp.ui.fragments.recipes.recipes_list
 
-import android.graphics.BitmapFactory
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.englishwordsapp.R
-import com.example.englishwordsapp.data.RecipesRepository
 import com.example.englishwordsapp.databinding.FragmentRecipesListBinding
 import com.example.englishwordsapp.ui.adapters.RecipeAdapter
 import com.example.englishwordsapp.ui.fragments.categories.CategoriesListFragment
@@ -22,10 +21,8 @@ class RecipesListFragment : Fragment() {
     private var _binding: FragmentRecipesListBinding? = null
     private val binding get() = _binding!!
 
-    private var categoryId: Int? = null
-    private var categoryName: String? = null
-    private var categoryImageUrl: String? = null
-    private lateinit var repository: RecipesRepository
+    private val viewModel: RecipesListViewModel by viewModels()
+    private lateinit var recipeAdapter: RecipeAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,23 +30,26 @@ class RecipesListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentRecipesListBinding.inflate(inflater, container, false)
-        repository = RecipesRepository(requireContext())
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        categoryId = arguments?.getInt(CategoriesListFragment.ARG_CATEGORY_ID)
-        categoryName = arguments?.getString(CategoriesListFragment.ARG_CATEGORY_NAME)
-        categoryImageUrl = arguments?.getString(CategoriesListFragment.ARG_CATEGORY_IMAGE_URL)
+        val categoryId = arguments?.getInt(CategoriesListFragment.ARG_CATEGORY_ID) ?: return
+        val categoryName = arguments?.getString(CategoriesListFragment.ARG_CATEGORY_NAME) ?: ""
+        val categoryImageUrl =
+            arguments?.getString(CategoriesListFragment.ARG_CATEGORY_IMAGE_URL) ?: ""
 
-        binding.tvRecipesTitle.text = categoryName
-        categoryImageUrl?.let { loadImageFromAssets(binding.ivCategoryImage, it) }
+        setupRecyclerView()
 
-        val recipes = repository.getRecipesByCategoryId(categoryId ?: 0)
+        viewModel.loadRecipesByCategory(categoryId, categoryName, categoryImageUrl)
 
-        val recipeAdapter = RecipeAdapter(recipes, { recipeId ->
+        viewModel.state.observe(viewLifecycleOwner) { state -> updateUI(state) }
+    }
+
+    private fun setupRecyclerView() {
+        recipeAdapter = RecipeAdapter(emptyList(), { recipeId ->
             openRecipeByRecipeId(recipeId)
         }, requireContext())
 
@@ -59,15 +59,13 @@ class RecipesListFragment : Fragment() {
         }
     }
 
-    private fun loadImageFromAssets(imageView: ImageView, imageName: String) {
-        try {
-            val inputStream = requireContext().assets.open(imageName)
-            val bitmap = BitmapFactory.decodeStream(inputStream)
-            imageView.setImageBitmap(bitmap)
-            inputStream.close()
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
+    @SuppressLint("NotifyDataSetChanged")
+    private fun updateUI(state: RecipesListState) {
+        binding.tvRecipesTitle.text = state.categoryName
+        binding.ivCategoryImage.setImageDrawable(state.categoryImage)
+
+        recipeAdapter.recipes = state.recipes
+        recipeAdapter.notifyDataSetChanged()
     }
 
     override fun onDestroyView() {

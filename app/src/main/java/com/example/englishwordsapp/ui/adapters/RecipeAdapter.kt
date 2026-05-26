@@ -10,7 +10,7 @@ import com.example.englishwordsapp.databinding.ItemRecipeBinding
 import com.example.englishwordsapp.model.Recipe
 
 class RecipeAdapter(
-    private val recipes: List<Recipe>,
+    var recipes: List<Recipe>,
     private val onRecipeClick: (recipeId: Int) -> Unit,
     private val context: Context
 ) : RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder>() {
