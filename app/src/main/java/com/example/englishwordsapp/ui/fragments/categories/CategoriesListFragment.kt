@@ -6,13 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.commit
-import androidx.fragment.app.replace
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.example.englishwordsapp.R
 import com.example.englishwordsapp.databinding.FragmentListCategoriesBinding
 import com.example.englishwordsapp.ui.adapters.CategoriesListAdapter
-import com.example.englishwordsapp.ui.fragments.recipes.recipes_list.RecipesListFragment
 
 class CategoriesListFragment : Fragment() {
 
@@ -77,10 +75,7 @@ class CategoriesListFragment : Fragment() {
                 putString(ARG_CATEGORY_IMAGE_URL, category.imageUrl)
             }
 
-            parentFragmentManager.commit {
-                replace<RecipesListFragment>(R.id.mainContainer, args = bundle)
-                addToBackStack(null)
-            }
+            findNavController().navigate(R.id.recipesListFragment, bundle)
         }
     }
 }

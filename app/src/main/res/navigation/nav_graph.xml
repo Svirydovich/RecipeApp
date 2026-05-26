@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/categoriesListFragment">
+
+    <fragment
+        android:id="@+id/categoriesListFragment"
+        android:name="com.example.englishwordsapp.ui.fragments.categories.CategoriesListFragment"
+        android:label="Categories" />
+
+    <fragment
+        android:id="@+id/recipesListFragment"
+        android:name="com.example.englishwordsapp.ui.fragments.recipes.recipes_list.RecipesListFragment"
+        android:label="RecipesList" />
+
+    <fragment
+        android:id="@+id/favoritesFragment"
+        android:name="com.example.englishwordsapp.ui.fragments.recipes.favorites.FavoritesFragment"
+        android:label="Favorites" />
+
+    <fragment
+        android:id="@+id/recipeFragment"
+        android:name="com.example.englishwordsapp.ui.fragments.recipes.recipe.RecipeFragment"
+        android:label="Recipe" />
+</navigation>
