@@ -13,7 +13,6 @@ import com.example.englishwordsapp.databinding.FragmentFavoritesBinding
 import com.example.englishwordsapp.ui.adapters.RecipeAdapter
 
 class FavoritesFragment : Fragment() {
-
     private var _binding: FragmentFavoritesBinding? = null
     private val binding get() = _binding!!
     private val viewModel: FavoritesViewModel by viewModels()
