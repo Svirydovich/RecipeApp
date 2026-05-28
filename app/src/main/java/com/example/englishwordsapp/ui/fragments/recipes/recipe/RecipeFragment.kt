@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.SeekBar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.englishwordsapp.R
 import com.example.englishwordsapp.databinding.FragmentRecipeBinding
@@ -17,16 +18,12 @@ import com.example.englishwordsapp.ui.adapters.MethodAdapter
 import com.google.android.material.divider.MaterialDividerItemDecoration
 
 class RecipeFragment : Fragment() {
-
-    companion object {
-        const val ARG_RECIPE_ID = "arg_recipe"
-    }
-
     private lateinit var ingredientsAdapter: IngredientsAdapter
     private lateinit var methodAdapter: MethodAdapter
     private val viewModel: RecipeViewModel by viewModels()
     private var _binding: FragmentRecipeBinding? = null
     private val binding get() = _binding!!
+    private val args: RecipeFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,7 +37,7 @@ class RecipeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val recipeId = arguments?.getInt(ARG_RECIPE_ID) ?: return
+        val recipeId = args.recipeId
 
         viewModel.loadRecipe(recipeId)
 

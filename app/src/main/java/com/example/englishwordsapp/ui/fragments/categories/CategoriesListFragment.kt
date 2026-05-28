@@ -8,18 +8,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.example.englishwordsapp.R
 import com.example.englishwordsapp.databinding.FragmentListCategoriesBinding
 import com.example.englishwordsapp.ui.adapters.CategoriesListAdapter
 
 class CategoriesListFragment : Fragment() {
-
-    companion object {
-        const val ARG_CATEGORY_ID = "ARG_CATEGORY_ID"
-        const val ARG_CATEGORY_NAME = "ARG_CATEGORY_NAME"
-        const val ARG_CATEGORY_IMAGE_URL = "ARG_CATEGORY_IMAGE_URL"
-    }
-
     private var _binding: FragmentListCategoriesBinding? = null
     private val binding get() = _binding!!
     private val viewModel: CategoriesListViewModel by viewModels()
@@ -69,13 +61,11 @@ class CategoriesListFragment : Fragment() {
         val category = viewModel.getCategoryById(categoryId)
 
         if (category != null) {
-            val bundle = Bundle().apply {
-                putInt(ARG_CATEGORY_ID, categoryId)
-                putString(ARG_CATEGORY_NAME, category.title)
-                putString(ARG_CATEGORY_IMAGE_URL, category.imageUrl)
-            }
-
-            findNavController().navigate(R.id.recipesListFragment, bundle)
+            findNavController().navigate(
+                CategoriesListFragmentDirections.actionCategoriesListFragmentToRecipesListFragment(
+                    categoryId, category.title, category.imageUrl
+                )
+            )
         }
     }
 }
