@@ -12,17 +12,7 @@
         tools:layout="@layout/fragment_list_categories">
         <action
             android:id="@+id/action_categoriesListFragment_to_recipesListFragment"
-            app:destination="@id/recipesListFragment">
-            <argument
-                android:name="categoryId"
-                android:defaultValue="0" />
-            <argument
-                android:name="categoryName"
-                android:defaultValue="" />
-            <argument
-                android:name="categoryImageUrl"
-                android:defaultValue="" />
-        </action>
+            app:destination="@id/recipesListFragment" />
     </fragment>
 
     <fragment
@@ -32,20 +22,19 @@
         tools:layout="@layout/fragment_recipes_list">
         <argument
             android:name="categoryId"
-            android:defaultValue="0" />
+            android:defaultValue="0"
+            app:argType="integer" />
         <argument
             android:name="categoryName"
-            android:defaultValue="" />
+            android:defaultValue=""
+            app:argType="string" />
         <argument
             android:name="categoryImageUrl"
-            android:defaultValue="" />
+            android:defaultValue=""
+            app:argType="string" />
         <action
             android:id="@+id/action_recipesListFragment_to_recipeFragment"
-            app:destination="@id/recipeFragment">
-            <argument
-                android:name="recipeId"
-                android:defaultValue="0" />
-        </action>
+            app:destination="@id/recipeFragment" />
     </fragment>
 
     <fragment
@@ -55,11 +44,7 @@
         tools:layout="@layout/fragment_favorites">
         <action
             android:id="@+id/action_favoritesFragment_to_recipeFragment"
-            app:destination="@id/recipeFragment">
-            <argument
-                android:name="recipeId"
-                android:defaultValue="0" />
-        </action>
+            app:destination="@id/recipeFragment" />
         <action
             android:id="@+id/action_favoritesFragment_to_categoriesListFragment"
             app:destination="@id/categoriesListFragment" />
@@ -72,7 +57,8 @@
         tools:layout="@layout/fragment_recipe">
         <argument
             android:name="recipeId"
-            android:defaultValue="0" />
+            android:defaultValue="0"
+            app:argType="integer" />
     </fragment>
 
 </navigation>
