@@ -34,13 +34,11 @@ class RecipesListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val categoryId = args.categoryId
-        val categoryName = args.categoryName
-        val categoryImageUrl = args.categoryImageUrl
+        val category = args.category
 
         setupRecyclerView()
 
-        viewModel.loadRecipesByCategory(categoryId, categoryName, categoryImageUrl)
+        viewModel.loadRecipesByCategory(category.id, category.title, category.imageUrl)
 
         viewModel.state.observe(viewLifecycleOwner) { state -> updateUI(state) }
     }

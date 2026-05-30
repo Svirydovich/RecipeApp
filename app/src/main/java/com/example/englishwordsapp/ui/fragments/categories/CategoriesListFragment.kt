@@ -59,13 +59,12 @@ class CategoriesListFragment : Fragment() {
 
     private fun openRecipesByCategoryId(categoryId: Int) {
         val category = viewModel.getCategoryById(categoryId)
+            ?: throw IllegalArgumentException("Категория с идентификатором $categoryId не найдена")
 
-        if (category != null) {
-            findNavController().navigate(
-                CategoriesListFragmentDirections.actionCategoriesListFragmentToRecipesListFragment(
-                    categoryId, category.title, category.imageUrl
-                )
+        findNavController().navigate(
+            CategoriesListFragmentDirections.actionCategoriesListFragmentToRecipesListFragment(
+                category
             )
-        }
+        )
     }
 }
