@@ -9,13 +9,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.englishwordsapp.R
 import com.example.englishwordsapp.databinding.FragmentFavoritesBinding
 import com.example.englishwordsapp.ui.adapters.RecipeAdapter
-import com.example.englishwordsapp.ui.fragments.recipes.recipe.RecipeFragment
 
 class FavoritesFragment : Fragment() {
-
     private var _binding: FragmentFavoritesBinding? = null
     private val binding get() = _binding!!
     private val viewModel: FavoritesViewModel by viewModels()
@@ -69,11 +66,8 @@ class FavoritesFragment : Fragment() {
     }
 
     private fun openRecipeByRecipeId(recipeId: Int) {
-        val bundle = Bundle().apply {
-            putInt(RecipeFragment.ARG_RECIPE_ID, recipeId)
-        }
-
-        findNavController().navigate(R.id.recipeFragment, bundle)
+        findNavController().navigate(
+            FavoritesFragmentDirections.actionFavoritesFragmentToRecipeFragment(recipeId)
+        )
     }
-
 }

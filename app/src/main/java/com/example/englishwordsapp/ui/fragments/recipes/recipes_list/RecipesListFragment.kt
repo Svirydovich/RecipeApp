@@ -8,12 +8,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.englishwordsapp.R
 import com.example.englishwordsapp.databinding.FragmentRecipesListBinding
 import com.example.englishwordsapp.ui.adapters.RecipeAdapter
-import com.example.englishwordsapp.ui.fragments.categories.CategoriesListFragment
-import com.example.englishwordsapp.ui.fragments.recipes.recipe.RecipeFragment
 
 class RecipesListFragment : Fragment() {
 
@@ -22,6 +20,7 @@ class RecipesListFragment : Fragment() {
 
     private val viewModel: RecipesListViewModel by viewModels()
     private lateinit var recipeAdapter: RecipeAdapter
+    private val args: RecipesListFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,10 +34,9 @@ class RecipesListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val categoryId = arguments?.getInt(CategoriesListFragment.ARG_CATEGORY_ID) ?: return
-        val categoryName = arguments?.getString(CategoriesListFragment.ARG_CATEGORY_NAME) ?: ""
-        val categoryImageUrl =
-            arguments?.getString(CategoriesListFragment.ARG_CATEGORY_IMAGE_URL) ?: ""
+        val categoryId = args.categoryId
+        val categoryName = args.categoryName
+        val categoryImageUrl = args.categoryImageUrl
 
         setupRecyclerView()
 
@@ -73,10 +71,8 @@ class RecipesListFragment : Fragment() {
     }
 
     private fun openRecipeByRecipeId(recipeId: Int) {
-        val bundle = Bundle().apply {
-            putInt(RecipeFragment.ARG_RECIPE_ID, recipeId)
-        }
-
-        findNavController().navigate(R.id.recipeFragment, bundle)
+        findNavController().navigate(
+            RecipesListFragmentDirections.actionRecipesListFragmentToRecipeFragment(recipeId)
+        )
     }
 }
