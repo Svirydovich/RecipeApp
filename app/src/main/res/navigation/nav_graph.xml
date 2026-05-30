@@ -12,7 +12,18 @@
         tools:layout="@layout/fragment_list_categories">
         <action
             android:id="@+id/action_categoriesListFragment_to_recipesListFragment"
-            app:destination="@id/recipesListFragment" />
+            app:destination="@id/recipesListFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_categoriesListFragment_to_favoritesFragment"
+            app:destination="@id/favoritesFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
 
     <fragment
@@ -21,20 +32,15 @@
         android:label="RecipesList"
         tools:layout="@layout/fragment_recipes_list">
         <argument
-            android:name="categoryId"
-            android:defaultValue="0"
-            app:argType="integer" />
-        <argument
-            android:name="categoryName"
-            android:defaultValue=""
-            app:argType="string" />
-        <argument
-            android:name="categoryImageUrl"
-            android:defaultValue=""
-            app:argType="string" />
+            android:name="category"
+            app:argType="com.example.englishwordsapp.model.Category" />
         <action
             android:id="@+id/action_recipesListFragment_to_recipeFragment"
-            app:destination="@id/recipeFragment" />
+            app:destination="@id/recipeFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
 
     <fragment
@@ -44,10 +50,18 @@
         tools:layout="@layout/fragment_favorites">
         <action
             android:id="@+id/action_favoritesFragment_to_recipeFragment"
-            app:destination="@id/recipeFragment" />
+            app:destination="@id/recipeFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
         <action
             android:id="@+id/action_favoritesFragment_to_categoriesListFragment"
-            app:destination="@id/categoriesListFragment" />
+            app:destination="@id/categoriesListFragment"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
+            app:popEnterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left" />
     </fragment>
 
     <fragment
