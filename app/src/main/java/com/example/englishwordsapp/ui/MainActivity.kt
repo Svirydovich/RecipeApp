@@ -35,17 +35,21 @@ class MainActivity : AppCompatActivity() {
             try {
                 val url = URL("https://recipes.androidsprint.ru/api/category")
                 val connection = url.openConnection() as HttpURLConnection
-                connection.connect()
 
-                val jsonString = connection.inputStream.bufferedReader().readText()
+                try {
+                    connection.connect()
 
-                Log.i("!!!", "responseCode: ${connection.responseCode}")
-                Log.i("!!!", "responseMessage: ${connection.responseMessage}")
-                Log.i("!!!", "Body: $jsonString")
+                    val jsonString = connection.inputStream.bufferedReader().readText()
 
-                val categories = Json.decodeFromString<List<Category>>(jsonString)
-                Log.i("MainActivity", "Получено категорий: ${categories.size}")
+                    Log.i("!!!", "responseCode: ${connection.responseCode}")
+                    Log.i("!!!", "responseMessage: ${connection.responseMessage}")
+                    Log.i("!!!", "Body: $jsonString")
 
+                    val categories = Json.decodeFromString<List<Category>>(jsonString)
+                    Log.i("MainActivity", "Получено категорий: ${categories.size}")
+                } finally {
+                    connection.disconnect()
+                }
             } catch (e: Exception) {
                 Log.e("MainActivity", "Ошибка при выполнении запроса", e)
             }
