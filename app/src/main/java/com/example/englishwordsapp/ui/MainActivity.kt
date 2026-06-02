@@ -10,6 +10,7 @@ import androidx.navigation.findNavController
 import com.example.englishwordsapp.R
 import com.example.englishwordsapp.databinding.ActivityMainBinding
 import com.example.englishwordsapp.model.Category
+import com.example.englishwordsapp.model.Recipe
 import kotlinx.serialization.json.Json
 import java.net.HttpURLConnection
 import java.net.URL
@@ -32,7 +33,7 @@ class MainActivity : AppCompatActivity() {
             "Метод onCreate() выполняется на потоке: ${Thread.currentThread().name}"
         )
 
-        threadPool.submit {
+        threadPool.execute {
             Log.i("MainActivity", "Выполняю запрос на потоке: ${Thread.currentThread().name}")
 
             try {
@@ -54,7 +55,7 @@ class MainActivity : AppCompatActivity() {
                     val categoryIds = categories.map { it.id }
 
                     categoryIds.forEach { categoryId ->
-                        threadPool.submit {
+                        threadPool.execute {
                             Log.i(
                                 "MainActivity",
                                 "Запрос рецептов категории $categoryId на потоке: ${Thread.currentThread().name}"
@@ -71,10 +72,11 @@ class MainActivity : AppCompatActivity() {
 
                                     val recipesJson =
                                         recipesConnection.inputStream.bufferedReader().readText()
+                                    val recipes: List<Recipe> = Json.decodeFromString(recipesJson)
 
                                     Log.i(
                                         "MainActivity",
-                                        "Рецепты категории $categoryId: $recipesJson"
+                                        "Категория $categoryId: получено рецептов ${recipes.size}"
                                     )
                                 } finally {
                                     recipesConnection.disconnect()
@@ -118,5 +120,10 @@ class MainActivity : AppCompatActivity() {
             )
             insets
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        threadPool.shutdown()
     }
 }
