@@ -10,13 +10,17 @@ import androidx.navigation.findNavController
 import com.example.englishwordsapp.R
 import com.example.englishwordsapp.databinding.ActivityMainBinding
 import com.example.englishwordsapp.model.Category
+import com.example.englishwordsapp.model.Recipe
 import kotlinx.serialization.json.Json
 import java.net.HttpURLConnection
 import java.net.URL
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private val threadPool: ExecutorService = Executors.newFixedThreadPool(10)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,7 +33,7 @@ class MainActivity : AppCompatActivity() {
             "Метод onCreate() выполняется на потоке: ${Thread.currentThread().name}"
         )
 
-        val thread = Thread {
+        threadPool.execute {
             Log.i("MainActivity", "Выполняю запрос на потоке: ${Thread.currentThread().name}")
 
             try {
@@ -47,15 +51,56 @@ class MainActivity : AppCompatActivity() {
 
                     val categories = Json.decodeFromString<List<Category>>(jsonString)
                     Log.i("MainActivity", "Получено категорий: ${categories.size}")
+
+                    val categoryIds = categories.map { it.id }
+
+                    categoryIds.forEach { categoryId ->
+                        threadPool.execute {
+                            Log.i(
+                                "MainActivity",
+                                "Запрос рецептов категории $categoryId на потоке: ${Thread.currentThread().name}"
+                            )
+
+                            try {
+                                val recipesUrl =
+                                    URL("https://recipes.androidsprint.ru/api/category/$categoryId/recipe")
+                                val recipesConnection =
+                                    recipesUrl.openConnection() as HttpURLConnection
+
+                                try {
+                                    recipesConnection.connect()
+
+                                    val recipesJson =
+                                        recipesConnection.inputStream.bufferedReader().readText()
+                                    val recipes: List<Recipe> = Json.decodeFromString(recipesJson)
+
+                                    Log.i(
+                                        "MainActivity",
+                                        "Категория $categoryId: получено рецептов ${recipes.size}"
+                                    )
+                                } finally {
+                                    recipesConnection.disconnect()
+                                }
+                            } catch (e: Exception) {
+                                Log.e(
+                                    "MainActivity",
+                                    "Ошибка при получении рецептов категории $categoryId",
+                                    e
+                                )
+                            }
+                        }
+                    }
                 } finally {
                     connection.disconnect()
                 }
             } catch (e: Exception) {
-                Log.e("MainActivity", "Ошибка при выполнении запроса", e)
+                Log.e(
+                    "MainActivity",
+                    "Ошибка при выполнении запроса",
+                    e
+                )
             }
         }
-
-        thread.start()
 
         binding.btnCategories.setOnClickListener {
             findNavController(R.id.nav_host_fragment).navigate(R.id.categoriesListFragment)
@@ -67,8 +112,18 @@ class MainActivity : AppCompatActivity() {
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            v.setPadding(
+                systemBars.left,
+                systemBars.top,
+                systemBars.right,
+                systemBars.bottom
+            )
             insets
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        threadPool.shutdown()
     }
 }
