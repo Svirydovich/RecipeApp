@@ -22,8 +22,8 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private val threadPool: ExecutorService = Executors.newFixedThreadPool(10)
-    val logging = HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY }
-    val client: OkHttpClient = OkHttpClient.Builder()
+    private val logging = HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY }
+    private val client: OkHttpClient = OkHttpClient.Builder()
         .addInterceptor(logging)
         .build()
 
