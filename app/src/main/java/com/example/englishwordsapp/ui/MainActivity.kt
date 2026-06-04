@@ -12,8 +12,9 @@ import com.example.englishwordsapp.databinding.ActivityMainBinding
 import com.example.englishwordsapp.model.Category
 import com.example.englishwordsapp.model.Recipe
 import kotlinx.serialization.json.Json
-import java.net.HttpURLConnection
-import java.net.URL
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.logging.HttpLoggingInterceptor
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
@@ -21,6 +22,10 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private val threadPool: ExecutorService = Executors.newFixedThreadPool(10)
+    val logging = HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY }
+    val client: OkHttpClient = OkHttpClient.Builder()
+        .addInterceptor(logging)
+        .build()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,17 +42,10 @@ class MainActivity : AppCompatActivity() {
             Log.i("MainActivity", "Выполняю запрос на потоке: ${Thread.currentThread().name}")
 
             try {
-                val url = URL("https://recipes.androidsprint.ru/api/category")
-                val connection = url.openConnection() as HttpURLConnection
-
-                try {
-                    connection.connect()
-
-                    val jsonString = connection.inputStream.bufferedReader().readText()
-
-                    Log.i("!!!", "responseCode: ${connection.responseCode}")
-                    Log.i("!!!", "responseMessage: ${connection.responseMessage}")
-                    Log.i("!!!", "Body: $jsonString")
+                val categoryRequest: Request =
+                    Request.Builder().url("https://recipes.androidsprint.ru/api/category").build()
+                client.newCall(categoryRequest).execute().use { categoryResponse ->
+                    val jsonString = categoryResponse.body?.string() ?: ""
 
                     val categories = Json.decodeFromString<List<Category>>(jsonString)
                     Log.i("MainActivity", "Получено категорий: ${categories.size}")
@@ -62,25 +60,21 @@ class MainActivity : AppCompatActivity() {
                             )
 
                             try {
-                                val recipesUrl =
-                                    URL("https://recipes.androidsprint.ru/api/category/$categoryId/recipe")
-                                val recipesConnection =
-                                    recipesUrl.openConnection() as HttpURLConnection
+                                val recipesRequest: Request = Request.Builder()
+                                    .url("https://recipes.androidsprint.ru/api/category/$categoryId/recipe")
+                                    .build()
 
-                                try {
-                                    recipesConnection.connect()
-
+                                client.newCall(recipesRequest).execute().use { recipesResponse ->
                                     val recipesJson =
-                                        recipesConnection.inputStream.bufferedReader().readText()
+                                        recipesResponse.body?.string() ?: ""
                                     val recipes: List<Recipe> = Json.decodeFromString(recipesJson)
 
                                     Log.i(
                                         "MainActivity",
                                         "Категория $categoryId: получено рецептов ${recipes.size}"
                                     )
-                                } finally {
-                                    recipesConnection.disconnect()
                                 }
+
                             } catch (e: Exception) {
                                 Log.e(
                                     "MainActivity",
@@ -90,8 +84,6 @@ class MainActivity : AppCompatActivity() {
                             }
                         }
                     }
-                } finally {
-                    connection.disconnect()
                 }
             } catch (e: Exception) {
                 Log.e(
