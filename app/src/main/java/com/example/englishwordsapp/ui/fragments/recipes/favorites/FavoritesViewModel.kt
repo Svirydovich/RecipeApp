@@ -4,8 +4,12 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.example.englishwordsapp.data.repository.RecipesRepository
 import com.example.englishwordsapp.model.Recipe
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 data class FavoritesState(
     val recipes: List<Recipe> = emptyList(),
@@ -24,12 +28,14 @@ class FavoritesViewModel(application: Application) : AndroidViewModel(applicatio
     }
 
     private fun loadFavorites() {
-        val favoriteIds = repository.getFavorites()
-        val favoriteRecipes = repository.getRecipesByIds(favoriteIds)
+        viewModelScope.launch(Dispatchers.IO) {
+            val favoriteIds = repository.getFavorites()
+            val favoriteRecipes: List<Recipe> =
+                repository.getRecipesByIds(favoriteIds) ?: emptyList()
 
-        _state.value = FavoritesState(
-            recipes = favoriteRecipes,
-            isEmpty = favoriteRecipes.isEmpty()
-        )
+            withContext(Dispatchers.Main) {
+                _state.value = FavoritesState(favoriteRecipes, favoriteRecipes.isEmpty())
+            }
+        }
     }
 }

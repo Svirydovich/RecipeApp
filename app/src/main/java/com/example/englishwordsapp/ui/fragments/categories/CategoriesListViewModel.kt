@@ -4,8 +4,11 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.example.englishwordsapp.data.repository.RecipesRepository
 import com.example.englishwordsapp.model.Category
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 data class CategoriesListState(
     val categories: List<Category> = emptyList()
@@ -23,8 +26,10 @@ class CategoriesListViewModel(application: Application) : AndroidViewModel(appli
     }
 
     private fun loadCategories() {
-        val categories = repository.getCategories()
-        _state.value = CategoriesListState(categories = categories)
+        viewModelScope.launch(Dispatchers.IO) {
+            val categories: List<Category> = repository.getCategories() ?: emptyList()
+            _state.postValue(CategoriesListState(categories))
+        }
     }
 
     fun getCategoryById(categoryId: Int): Category? {

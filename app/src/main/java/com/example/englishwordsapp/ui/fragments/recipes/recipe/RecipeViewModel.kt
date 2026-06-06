@@ -8,6 +8,10 @@ import androidx.lifecycle.MutableLiveData
 import com.example.englishwordsapp.data.repository.RecipesRepository
 import com.example.englishwordsapp.model.Recipe
 import androidx.core.content.edit
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 data class RecipeState(
     val recipe: Recipe? = null,
@@ -24,21 +28,29 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
         get() = _recipeState
 
     fun loadRecipe(recipeId: Int) {
-        val recipe = repository.getRecipeById(recipeId)
+        viewModelScope.launch(Dispatchers.IO) {
 
-        if (recipe != null) {
-            val isFavorite = getFavorites().contains(recipe.id.toString())
-            val recipeImage = loadImageFromAssets(recipe.imageUrl)
+            val recipe = repository.getRecipeById(recipeId)
 
-            _recipeState.value = RecipeState(
-                recipe = recipe,
-                isFavorites = isFavorite,
-                servings = _recipeState.value?.servings ?: 1,
-                recipeImage = recipeImage
-            )
-            // TODO: load from network
+            if (recipe != null) {
+
+                val isFavorite =
+                    repository.getFavorites().contains(recipe.id.toString())
+
+                val recipeImage =
+                    loadImageFromAssets(recipe.imageUrl)
+
+                withContext(Dispatchers.Main) {
+                    _recipeState.value = RecipeState(
+                        recipe = recipe,
+                        isFavorites = isFavorite,
+                        servings = _recipeState.value?.servings ?: 1,
+                        recipeImage = recipeImage
+                    )
+                    // TODO: load from network
+                }
+            }
         }
-
     }
 
     private fun loadImageFromAssets(fileName: String): Drawable? {
