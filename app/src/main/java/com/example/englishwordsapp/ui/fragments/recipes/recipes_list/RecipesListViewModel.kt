@@ -30,19 +30,19 @@ class RecipesListViewModel(application: Application) : AndroidViewModel(applicat
         viewModelScope.launch(Dispatchers.IO) {
             val recipes = repository.getRecipesByCategoryId(categoryId)
 
-            withContext(Dispatchers.Main) {
-                if (recipes == null) {
+            if (recipes == null) {
+                withContext(Dispatchers.Main) {
                     Toast.makeText(getApplication(), "Ошибка получения данных", Toast.LENGTH_SHORT)
                         .show()
-                    return@withContext
                 }
+                return@launch
             }
 
             val categoryImage: Drawable? = loadImageFromAssets(categoryImageUrl)
 
             withContext(Dispatchers.Main) {
                 _state.value = RecipesListState(
-                    recipes = recipes!!,
+                    recipes = recipes,
                     categoryName = categoryName,
                     categoryImage = categoryImage
                 )

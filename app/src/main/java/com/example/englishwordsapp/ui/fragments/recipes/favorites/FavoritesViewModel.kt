@@ -33,12 +33,15 @@ class FavoritesViewModel(application: Application) : AndroidViewModel(applicatio
             val favoriteIds = repository.getFavorites()
             val favoriteRecipes = repository.getRecipesByIds(favoriteIds)
 
-            withContext(Dispatchers.Main) {
-                if (favoriteRecipes == null) {
+            if (favoriteRecipes == null) {
+                withContext(Dispatchers.Main) {
                     Toast.makeText(getApplication(), "Ошибка получения данных", Toast.LENGTH_SHORT)
                         .show()
-                    return@withContext
                 }
+                return@launch
+            }
+
+            withContext(Dispatchers.Main) {
                 _state.value = FavoritesState(favoriteRecipes, favoriteRecipes.isEmpty())
             }
         }

@@ -31,12 +31,15 @@ class CategoriesListViewModel(application: Application) : AndroidViewModel(appli
         viewModelScope.launch(Dispatchers.IO) {
             val categories = repository.getCategories()
 
-            withContext(Dispatchers.Main) {
-                if (categories == null) {
+            if (categories == null) {
+                withContext(Dispatchers.Main) {
                     Toast.makeText(getApplication(), "Ошибка получения данных", Toast.LENGTH_SHORT)
                         .show()
-                    return@withContext
                 }
+                return@launch
+            }
+
+            withContext(Dispatchers.Main) {
                 _state.value = CategoriesListState(categories = categories)
             }
         }

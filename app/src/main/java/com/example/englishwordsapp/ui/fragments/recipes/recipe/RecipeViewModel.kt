@@ -30,18 +30,17 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
 
     fun loadRecipe(recipeId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-
             val recipe = repository.getRecipeById(recipeId)
 
-            withContext(Dispatchers.Main) {
-                if (recipe == null) {
+            if (recipe == null) {
+                withContext(Dispatchers.Main) {
                     Toast.makeText(getApplication(), "Ошибка получения данных", Toast.LENGTH_SHORT)
                         .show()
-                    return@withContext
                 }
+                return@launch
             }
 
-            val isFavorite = repository.getFavorites().contains(recipe!!.id.toString())
+            val isFavorite = repository.getFavorites().contains(recipe.id.toString())
             val recipeImage = loadImageFromAssets(recipe.imageUrl)
 
             withContext(Dispatchers.Main) {
