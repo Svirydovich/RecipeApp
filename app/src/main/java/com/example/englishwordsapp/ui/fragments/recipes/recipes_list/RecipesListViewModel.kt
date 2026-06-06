@@ -2,6 +2,7 @@ package com.example.englishwordsapp.ui.fragments.recipes.recipes_list
 
 import android.app.Application
 import android.graphics.drawable.Drawable
+import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -27,12 +28,21 @@ class RecipesListViewModel(application: Application) : AndroidViewModel(applicat
 
     fun loadRecipesByCategory(categoryId: Int, categoryName: String, categoryImageUrl: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            val recipes: List<Recipe> = repository.getRecipesByCategoryId(categoryId) ?: emptyList()
+            val recipes = repository.getRecipesByCategoryId(categoryId)
+
+            withContext(Dispatchers.Main) {
+                if (recipes == null) {
+                    Toast.makeText(getApplication(), "Ошибка получения данных", Toast.LENGTH_SHORT)
+                        .show()
+                    return@withContext
+                }
+            }
+
             val categoryImage: Drawable? = loadImageFromAssets(categoryImageUrl)
 
             withContext(Dispatchers.Main) {
                 _state.value = RecipesListState(
-                    recipes = recipes,
+                    recipes = recipes!!,
                     categoryName = categoryName,
                     categoryImage = categoryImage
                 )

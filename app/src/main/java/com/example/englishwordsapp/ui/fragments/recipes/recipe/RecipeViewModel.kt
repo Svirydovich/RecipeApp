@@ -2,6 +2,7 @@ package com.example.englishwordsapp.ui.fragments.recipes.recipe
 
 import android.app.Application
 import android.graphics.drawable.Drawable
+import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -32,23 +33,24 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
 
             val recipe = repository.getRecipeById(recipeId)
 
-            if (recipe != null) {
-
-                val isFavorite =
-                    repository.getFavorites().contains(recipe.id.toString())
-
-                val recipeImage =
-                    loadImageFromAssets(recipe.imageUrl)
-
-                withContext(Dispatchers.Main) {
-                    _recipeState.value = RecipeState(
-                        recipe = recipe,
-                        isFavorites = isFavorite,
-                        servings = _recipeState.value?.servings ?: 1,
-                        recipeImage = recipeImage
-                    )
-                    // TODO: load from network
+            withContext(Dispatchers.Main) {
+                if (recipe == null) {
+                    Toast.makeText(getApplication(), "Ошибка получения данных", Toast.LENGTH_SHORT)
+                        .show()
+                    return@withContext
                 }
+            }
+
+            val isFavorite = repository.getFavorites().contains(recipe!!.id.toString())
+            val recipeImage = loadImageFromAssets(recipe.imageUrl)
+
+            withContext(Dispatchers.Main) {
+                _recipeState.value = RecipeState(
+                    recipe = recipe,
+                    isFavorites = isFavorite,
+                    servings = _recipeState.value?.servings ?: 1,
+                    recipeImage = recipeImage
+                )
             }
         }
     }

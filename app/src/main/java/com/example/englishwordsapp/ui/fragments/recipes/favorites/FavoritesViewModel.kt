@@ -1,6 +1,7 @@
 package com.example.englishwordsapp.ui.fragments.recipes.favorites
 
 import android.app.Application
+import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -30,10 +31,14 @@ class FavoritesViewModel(application: Application) : AndroidViewModel(applicatio
     private fun loadFavorites() {
         viewModelScope.launch(Dispatchers.IO) {
             val favoriteIds = repository.getFavorites()
-            val favoriteRecipes: List<Recipe> =
-                repository.getRecipesByIds(favoriteIds) ?: emptyList()
+            val favoriteRecipes = repository.getRecipesByIds(favoriteIds)
 
             withContext(Dispatchers.Main) {
+                if (favoriteRecipes == null) {
+                    Toast.makeText(getApplication(), "Ошибка получения данных", Toast.LENGTH_SHORT)
+                        .show()
+                    return@withContext
+                }
                 _state.value = FavoritesState(favoriteRecipes, favoriteRecipes.isEmpty())
             }
         }
