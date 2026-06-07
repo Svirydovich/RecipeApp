@@ -2,11 +2,16 @@ package com.example.englishwordsapp.ui.fragments.recipes.recipes_list
 
 import android.app.Application
 import android.graphics.drawable.Drawable
+import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.englishwordsapp.data.RecipesRepository
+import androidx.lifecycle.viewModelScope
+import com.example.englishwordsapp.data.repository.RecipesRepository
 import com.example.englishwordsapp.model.Recipe
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 data class RecipesListState(
     val recipes: List<Recipe> = emptyList(),
@@ -22,14 +27,27 @@ class RecipesListViewModel(application: Application) : AndroidViewModel(applicat
         get() = _state
 
     fun loadRecipesByCategory(categoryId: Int, categoryName: String, categoryImageUrl: String) {
-        val recipes = repository.getRecipesByCategoryId(categoryId)
-        val categoryImage = loadImageFromAssets(categoryImageUrl)
+        viewModelScope.launch(Dispatchers.IO) {
+            val recipes = repository.getRecipesByCategoryId(categoryId)
 
-        _state.value = RecipesListState(
-            recipes = recipes,
-            categoryName = categoryName,
-            categoryImage = categoryImage
-        )
+            if (recipes == null) {
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(getApplication(), "Ошибка получения данных", Toast.LENGTH_SHORT)
+                        .show()
+                }
+                return@launch
+            }
+
+            val categoryImage: Drawable? = loadImageFromAssets(categoryImageUrl)
+
+            withContext(Dispatchers.Main) {
+                _state.value = RecipesListState(
+                    recipes = recipes,
+                    categoryName = categoryName,
+                    categoryImage = categoryImage
+                )
+            }
+        }
     }
 
     private fun loadImageFromAssets(fileName: String): Drawable? {

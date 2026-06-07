@@ -2,12 +2,17 @@ package com.example.englishwordsapp.ui.fragments.recipes.recipe
 
 import android.app.Application
 import android.graphics.drawable.Drawable
+import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.englishwordsapp.data.RecipesRepository
+import com.example.englishwordsapp.data.repository.RecipesRepository
 import com.example.englishwordsapp.model.Recipe
 import androidx.core.content.edit
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 data class RecipeState(
     val recipe: Recipe? = null,
@@ -24,21 +29,29 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
         get() = _recipeState
 
     fun loadRecipe(recipeId: Int) {
-        val recipe = repository.getRecipeById(recipeId)
+        viewModelScope.launch(Dispatchers.IO) {
+            val recipe = repository.getRecipeById(recipeId)
 
-        if (recipe != null) {
-            val isFavorite = getFavorites().contains(recipe.id.toString())
+            if (recipe == null) {
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(getApplication(), "Ошибка получения данных", Toast.LENGTH_SHORT)
+                        .show()
+                }
+                return@launch
+            }
+
+            val isFavorite = repository.getFavorites().contains(recipe.id.toString())
             val recipeImage = loadImageFromAssets(recipe.imageUrl)
 
-            _recipeState.value = RecipeState(
-                recipe = recipe,
-                isFavorites = isFavorite,
-                servings = _recipeState.value?.servings ?: 1,
-                recipeImage = recipeImage
-            )
-            // TODO: load from network
+            withContext(Dispatchers.Main) {
+                _recipeState.value = RecipeState(
+                    recipe = recipe,
+                    isFavorites = isFavorite,
+                    servings = _recipeState.value?.servings ?: 1,
+                    recipeImage = recipeImage
+                )
+            }
         }
-
     }
 
     private fun loadImageFromAssets(fileName: String): Drawable? {

@@ -1,11 +1,16 @@
 package com.example.englishwordsapp.ui.fragments.recipes.favorites
 
 import android.app.Application
+import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.englishwordsapp.data.RecipesRepository
+import androidx.lifecycle.viewModelScope
+import com.example.englishwordsapp.data.repository.RecipesRepository
 import com.example.englishwordsapp.model.Recipe
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 data class FavoritesState(
     val recipes: List<Recipe> = emptyList(),
@@ -24,12 +29,21 @@ class FavoritesViewModel(application: Application) : AndroidViewModel(applicatio
     }
 
     private fun loadFavorites() {
-        val favoriteIds = repository.getFavorites()
-        val favoriteRecipes = repository.getRecipesByIds(favoriteIds)
+        viewModelScope.launch(Dispatchers.IO) {
+            val favoriteIds = repository.getFavorites()
+            val favoriteRecipes = repository.getRecipesByIds(favoriteIds)
 
-        _state.value = FavoritesState(
-            recipes = favoriteRecipes,
-            isEmpty = favoriteRecipes.isEmpty()
-        )
+            if (favoriteRecipes == null) {
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(getApplication(), "Ошибка получения данных", Toast.LENGTH_SHORT)
+                        .show()
+                }
+                return@launch
+            }
+
+            withContext(Dispatchers.Main) {
+                _state.value = FavoritesState(favoriteRecipes, favoriteRecipes.isEmpty())
+            }
+        }
     }
 }
