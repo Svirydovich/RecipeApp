@@ -36,9 +36,7 @@ class FavoritesFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        recipeAdapter = RecipeAdapter(emptyList(), { recipeId ->
-            openRecipeByRecipeId(recipeId)
-        }, requireContext())
+        recipeAdapter = RecipeAdapter(emptyList()) { recipeId -> openRecipeByRecipeId(recipeId) }
 
         binding.rvFavorites.apply {
             adapter = recipeAdapter
