@@ -8,9 +8,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.englishwordsapp.data.repository.RecipesRepository
 import com.example.englishwordsapp.model.Recipe
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 data class FavoritesState(
     val recipes: List<Recipe> = emptyList(),
@@ -29,21 +27,17 @@ class FavoritesViewModel(application: Application) : AndroidViewModel(applicatio
     }
 
     private fun loadFavorites() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             val favoriteIds = repository.getFavorites()
             val favoriteRecipes = repository.getRecipesByIds(favoriteIds)
 
             if (favoriteRecipes == null) {
-                withContext(Dispatchers.Main) {
-                    Toast.makeText(getApplication(), "Ошибка получения данных", Toast.LENGTH_SHORT)
-                        .show()
-                }
+                Toast.makeText(getApplication(), "Ошибка получения данных", Toast.LENGTH_SHORT)
+                    .show()
                 return@launch
             }
 
-            withContext(Dispatchers.Main) {
-                _state.value = FavoritesState(favoriteRecipes, favoriteRecipes.isEmpty())
-            }
+            _state.value = FavoritesState(favoriteRecipes, favoriteRecipes.isEmpty())
         }
     }
 }

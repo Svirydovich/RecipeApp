@@ -8,9 +8,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.englishwordsapp.data.repository.RecipesRepository
 import com.example.englishwordsapp.model.Category
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 data class CategoriesListState(
     val categories: List<Category> = emptyList()
@@ -28,20 +26,16 @@ class CategoriesListViewModel(application: Application) : AndroidViewModel(appli
     }
 
     private fun loadCategories() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             val categories = repository.getCategories()
 
             if (categories == null) {
-                withContext(Dispatchers.Main) {
-                    Toast.makeText(getApplication(), "Ошибка получения данных", Toast.LENGTH_SHORT)
-                        .show()
-                }
+                Toast.makeText(getApplication(), "Ошибка получения данных", Toast.LENGTH_SHORT)
+                    .show()
                 return@launch
             }
 
-            withContext(Dispatchers.Main) {
-                _state.value = CategoriesListState(categories = categories)
-            }
+            _state.value = CategoriesListState(categories = categories)
         }
     }
 

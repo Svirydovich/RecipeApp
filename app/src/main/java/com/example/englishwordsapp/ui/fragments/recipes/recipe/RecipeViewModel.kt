@@ -1,18 +1,16 @@
 package com.example.englishwordsapp.ui.fragments.recipes.recipe
 
 import android.app.Application
+import androidx.core.content.edit
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.englishwordsapp.data.repository.RecipesRepository
-import com.example.englishwordsapp.model.Recipe
-import androidx.core.content.edit
 import androidx.lifecycle.viewModelScope
+import com.example.englishwordsapp.data.repository.RecipesRepository
 import com.example.englishwordsapp.data.repository.RecipesRepository.Companion.BASE_URL
 import com.example.englishwordsapp.data.repository.RecipesRepository.Companion.IMAGES_PATH
-import kotlinx.coroutines.Dispatchers
+import com.example.englishwordsapp.model.Recipe
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 data class RecipeState(
     val recipe: Recipe? = null,
@@ -30,14 +28,12 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
         get() = _recipeState
 
     fun loadRecipe(recipeId: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             val recipe = repository.getRecipeById(recipeId)
 
             if (recipe == null) {
-                withContext(Dispatchers.Main) {
-                    _recipeState.value =
-                        _recipeState.value?.copy(errorMessage = "Ошибка получения данных")
-                }
+                _recipeState.value =
+                    _recipeState.value?.copy(errorMessage = "Ошибка получения данных")
                 return@launch
             }
 
@@ -45,14 +41,13 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
 
             val imageUrl = "$BASE_URL$IMAGES_PATH${recipe.imageUrl}"
 
-            withContext(Dispatchers.Main) {
-                _recipeState.value = RecipeState(
-                    recipe = recipe,
-                    isFavorites = isFavorite,
-                    servings = _recipeState.value?.servings ?: 1,
-                    recipeImageUrl = imageUrl
-                )
-            }
+            _recipeState.value = RecipeState(
+                recipe = recipe,
+                isFavorites = isFavorite,
+                servings = _recipeState.value?.servings ?: 1,
+                recipeImageUrl = imageUrl
+            )
+
         }
     }
 
