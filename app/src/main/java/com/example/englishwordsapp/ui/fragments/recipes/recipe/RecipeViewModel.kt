@@ -1,7 +1,6 @@
 package com.example.englishwordsapp.ui.fragments.recipes.recipe
 
 import android.app.Application
-import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -19,7 +18,8 @@ data class RecipeState(
     val recipe: Recipe? = null,
     val isFavorites: Boolean = false,
     val servings: Int = 1,
-    val recipeImageUrl: String? = null
+    val recipeImageUrl: String? = null,
+    val errorMessage: String? = null
 )
 
 class RecipeViewModel(application: Application) : AndroidViewModel(application) {
@@ -35,8 +35,8 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
 
             if (recipe == null) {
                 withContext(Dispatchers.Main) {
-                    Toast.makeText(getApplication(), "Ошибка получения данных", Toast.LENGTH_SHORT)
-                        .show()
+                    _recipeState.value =
+                        _recipeState.value?.copy(errorMessage = "Ошибка получения данных")
                 }
                 return@launch
             }

@@ -1,7 +1,6 @@
 package com.example.englishwordsapp.ui.fragments.recipes.recipes_list
 
 import android.app.Application
-import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -17,7 +16,8 @@ import kotlinx.coroutines.withContext
 data class RecipesListState(
     val recipes: List<Recipe> = emptyList(),
     val categoryName: String = "",
-    val categoryImageUrl: String? = null
+    val categoryImageUrl: String? = null,
+    val errorMessage: String? = null
 )
 
 class RecipesListViewModel(application: Application) : AndroidViewModel(application) {
@@ -32,10 +32,7 @@ class RecipesListViewModel(application: Application) : AndroidViewModel(applicat
             val recipes = repository.getRecipesByCategoryId(categoryId)
 
             if (recipes == null) {
-                withContext(Dispatchers.Main) {
-                    Toast.makeText(getApplication(), "Ошибка получения данных", Toast.LENGTH_SHORT)
-                        .show()
-                }
+                _state.value = _state.value?.copy(errorMessage = "Ошибка получения данных")
                 return@launch
             }
 
