@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.example.englishwordsapp.R
 import com.example.englishwordsapp.databinding.FragmentRecipeBinding
 import com.example.englishwordsapp.ui.adapters.IngredientsAdapter
@@ -54,7 +55,11 @@ class RecipeFragment : Fragment() {
             val iconRes = if (state.isFavorites) R.drawable.ic_heart else R.drawable.ic_heart_empty
             binding.favoriteButton.setImageResource(iconRes)
 
-            binding.ivRecipeImage.setImageDrawable(state.recipeImage)
+            Glide.with(binding.ivRecipeImage.context)
+                .load(state.recipeImageUrl)
+                .placeholder(R.drawable.img_placeholder)
+                .error(R.drawable.img_error)
+                .into(binding.ivRecipeImage)
 
             state.recipe?.let {
                 updateUI(state)

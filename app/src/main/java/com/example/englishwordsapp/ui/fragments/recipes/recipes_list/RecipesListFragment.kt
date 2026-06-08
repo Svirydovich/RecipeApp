@@ -10,6 +10,8 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
+import com.example.englishwordsapp.R
 import com.example.englishwordsapp.databinding.FragmentRecipesListBinding
 import com.example.englishwordsapp.ui.adapters.RecipeAdapter
 
@@ -44,9 +46,7 @@ class RecipesListFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        recipeAdapter = RecipeAdapter(emptyList(), { recipeId ->
-            openRecipeByRecipeId(recipeId)
-        }, requireContext())
+        recipeAdapter = RecipeAdapter(emptyList()) { recipeId -> openRecipeByRecipeId(recipeId) }
 
         binding.rvRecipes.apply {
             adapter = recipeAdapter
@@ -57,7 +57,11 @@ class RecipesListFragment : Fragment() {
     @SuppressLint("NotifyDataSetChanged")
     private fun updateUI(state: RecipesListState) {
         binding.tvRecipesTitle.text = state.categoryName
-        binding.ivCategoryImage.setImageDrawable(state.categoryImage)
+        Glide.with(binding.ivCategoryImage.context)
+            .load(state.categoryImageUrl)
+            .placeholder(R.drawable.img_placeholder)
+            .error(R.drawable.img_error)
+            .into(binding.ivCategoryImage)
 
         recipeAdapter.recipes = state.recipes
         recipeAdapter.notifyDataSetChanged()

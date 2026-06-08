@@ -1,8 +1,6 @@
 package com.example.englishwordsapp.ui.fragments.recipes.recipe
 
 import android.app.Application
-import android.graphics.drawable.Drawable
-import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -10,6 +8,8 @@ import com.example.englishwordsapp.data.repository.RecipesRepository
 import com.example.englishwordsapp.model.Recipe
 import androidx.core.content.edit
 import androidx.lifecycle.viewModelScope
+import com.example.englishwordsapp.data.repository.RecipesRepository.Companion.BASE_URL
+import com.example.englishwordsapp.data.repository.RecipesRepository.Companion.IMAGES_PATH
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -18,7 +18,8 @@ data class RecipeState(
     val recipe: Recipe? = null,
     val isFavorites: Boolean = false,
     val servings: Int = 1,
-    val recipeImage: Drawable? = null
+    val recipeImageUrl: String? = null,
+    val errorMessage: String? = null
 )
 
 class RecipeViewModel(application: Application) : AndroidViewModel(application) {
@@ -34,33 +35,24 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
 
             if (recipe == null) {
                 withContext(Dispatchers.Main) {
-                    Toast.makeText(getApplication(), "Ошибка получения данных", Toast.LENGTH_SHORT)
-                        .show()
+                    _recipeState.value =
+                        _recipeState.value?.copy(errorMessage = "Ошибка получения данных")
                 }
                 return@launch
             }
 
             val isFavorite = repository.getFavorites().contains(recipe.id.toString())
-            val recipeImage = loadImageFromAssets(recipe.imageUrl)
+
+            val imageUrl = "$BASE_URL$IMAGES_PATH${recipe.imageUrl}"
 
             withContext(Dispatchers.Main) {
                 _recipeState.value = RecipeState(
                     recipe = recipe,
                     isFavorites = isFavorite,
                     servings = _recipeState.value?.servings ?: 1,
-                    recipeImage = recipeImage
+                    recipeImageUrl = imageUrl
                 )
             }
-        }
-    }
-
-    private fun loadImageFromAssets(fileName: String): Drawable? {
-        return try {
-            val inputStream = getApplication<Application>().assets.open(fileName)
-            Drawable.createFromStream(inputStream, null)
-        } catch (e: Exception) {
-            android.util.Log.e("RecipeViewModel", "Failed to load image: $fileName", e)
-            null
         }
     }
 

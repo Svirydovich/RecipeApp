@@ -1,18 +1,18 @@
 package com.example.englishwordsapp.ui.adapters
 
-import android.content.Context
-import android.graphics.BitmapFactory
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.example.englishwordsapp.R
+import com.example.englishwordsapp.data.repository.RecipesRepository.Companion.BASE_URL
+import com.example.englishwordsapp.data.repository.RecipesRepository.Companion.IMAGES_PATH
 import com.example.englishwordsapp.databinding.ItemRecipeBinding
 import com.example.englishwordsapp.model.Recipe
 
 class RecipeAdapter(
     var recipes: List<Recipe>,
-    private val onRecipeClick: (recipeId: Int) -> Unit,
-    private val context: Context
+    private val onRecipeClick: (recipeId: Int) -> Unit
 ) : RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder>() {
 
     inner class RecipeViewHolder(private val binding: ItemRecipeBinding) :
@@ -20,22 +20,15 @@ class RecipeAdapter(
 
         fun bind(recipe: Recipe) {
             binding.tvRecipeTitle.text = recipe.title
-            loadImageFromAssets(binding.ivRecipeImage, recipe.imageUrl)
 
-            binding.root.setOnClickListener {
-                onRecipeClick(recipe.id)
-            }
-        }
+            val imageUrl = "$BASE_URL$IMAGES_PATH${recipe.imageUrl}"
+            Glide.with(binding.ivRecipeImage.context)
+                .load(imageUrl)
+                .placeholder(R.drawable.img_placeholder)
+                .error(R.drawable.img_error)
+                .into(binding.ivRecipeImage)
 
-        private fun loadImageFromAssets(imageView: ImageView, imageName: String) {
-            try {
-                val inputStream = context.assets.open(imageName)
-                val bitmap = BitmapFactory.decodeStream(inputStream)
-                imageView.setImageBitmap(bitmap)
-                inputStream.close()
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
+            binding.root.setOnClickListener { onRecipeClick(recipe.id) }
         }
     }
 

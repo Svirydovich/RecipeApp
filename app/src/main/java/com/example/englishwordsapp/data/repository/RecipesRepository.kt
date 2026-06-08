@@ -12,7 +12,8 @@ class RecipesRepository(private val context: Context) {
     companion object {
         private const val PREFS_NAME = "recipe_prefs"
         private const val FAVORITES_KEY = "favorites_set"
-        private const val BASE_URL = "https://recipes.androidsprint.ru/"
+        const val BASE_URL = "https://recipes.androidsprint.ru/"
+        const val IMAGES_PATH = "api/images/"
     }
 
     private val apiService: RecipeApiService
