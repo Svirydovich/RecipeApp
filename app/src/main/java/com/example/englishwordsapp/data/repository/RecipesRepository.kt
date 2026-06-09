@@ -4,6 +4,8 @@ import android.content.Context
 import com.example.englishwordsapp.data.api.RecipeApiService
 import com.example.englishwordsapp.model.Category
 import com.example.englishwordsapp.model.Recipe
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -27,22 +29,17 @@ class RecipesRepository(private val context: Context) {
         apiService = retrofit.create(RecipeApiService::class.java)
     }
 
-    fun getCategories(): List<Category>? {
-        return try {
+    suspend fun getCategories(): List<Category>? = withContext(Dispatchers.IO) {
+        try {
             val response = apiService.getCategories().execute()
-
-            if (response.isSuccessful) {
-                response.body()
-            } else {
-                null
-            }
+            if (response.isSuccessful) response.body() else null
         } catch (e: Exception) {
             null
         }
     }
 
-    fun getCategoryById(categoryId: Int): Category? {
-        return try {
+    suspend fun getCategoryById(categoryId: Int): Category? = withContext(Dispatchers.IO) {
+        try {
             val response = apiService.getCategoryById(categoryId).execute()
 
             if (response.isSuccessful) {
@@ -55,22 +52,23 @@ class RecipesRepository(private val context: Context) {
         }
     }
 
-    fun getRecipesByCategoryId(categoryId: Int): List<Recipe>? {
-        return try {
-            val response = apiService.getRecipesByCategory(categoryId).execute()
+    suspend fun getRecipesByCategoryId(categoryId: Int): List<Recipe>? =
+        withContext(Dispatchers.IO) {
+            try {
+                val response = apiService.getRecipesByCategory(categoryId).execute()
 
-            if (response.isSuccessful) {
-                response.body()
-            } else {
+                if (response.isSuccessful) {
+                    response.body()
+                } else {
+                    null
+                }
+            } catch (e: Exception) {
                 null
             }
-        } catch (e: Exception) {
-            null
         }
-    }
 
-    fun getRecipeById(recipeId: Int): Recipe? {
-        return try {
+    suspend fun getRecipeById(recipeId: Int): Recipe? = withContext(Dispatchers.IO) {
+        try {
             val response = apiService.getRecipeById(recipeId).execute()
 
             if (response.isSuccessful) {
@@ -83,8 +81,8 @@ class RecipesRepository(private val context: Context) {
         }
     }
 
-    fun getRecipesByIds(ids: Set<String>): List<Recipe>? {
-        return try {
+    suspend fun getRecipesByIds(ids: Set<String>): List<Recipe>? = withContext(Dispatchers.IO) {
+        try {
             val response = apiService.getRecipes().execute()
 
             if (response.isSuccessful) {

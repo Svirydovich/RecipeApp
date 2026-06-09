@@ -1,19 +1,17 @@
 package com.example.englishwordsapp.ui.fragments.categories
 
 import android.app.Application
-import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.englishwordsapp.data.repository.RecipesRepository
 import com.example.englishwordsapp.model.Category
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 data class CategoriesListState(
-    val categories: List<Category> = emptyList()
+    val categories: List<Category> = emptyList(),
+    val errorMessage: String? = null
 )
 
 class CategoriesListViewModel(application: Application) : AndroidViewModel(application) {
@@ -28,20 +26,15 @@ class CategoriesListViewModel(application: Application) : AndroidViewModel(appli
     }
 
     private fun loadCategories() {
-        viewModelScope.launch(Dispatchers.IO) {
-            val categories = repository.getCategories()
+        viewModelScope.launch {
+            _state.value = _state.value?.copy(errorMessage = null)
 
+            val categories = repository.getCategories()
             if (categories == null) {
-                withContext(Dispatchers.Main) {
-                    Toast.makeText(getApplication(), "Ошибка получения данных", Toast.LENGTH_SHORT)
-                        .show()
-                }
+                _state.value = _state.value?.copy(errorMessage = "Ошибка получения данных")
                 return@launch
             }
-
-            withContext(Dispatchers.Main) {
-                _state.value = CategoriesListState(categories = categories)
-            }
+            _state.value = CategoriesListState(categories = categories)
         }
     }
 

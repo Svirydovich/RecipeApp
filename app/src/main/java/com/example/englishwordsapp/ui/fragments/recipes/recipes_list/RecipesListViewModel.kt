@@ -9,9 +9,7 @@ import com.example.englishwordsapp.data.repository.RecipesRepository
 import com.example.englishwordsapp.data.repository.RecipesRepository.Companion.BASE_URL
 import com.example.englishwordsapp.data.repository.RecipesRepository.Companion.IMAGES_PATH
 import com.example.englishwordsapp.model.Recipe
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 data class RecipesListState(
     val recipes: List<Recipe> = emptyList(),
@@ -28,7 +26,7 @@ class RecipesListViewModel(application: Application) : AndroidViewModel(applicat
         get() = _state
 
     fun loadRecipesByCategory(categoryId: Int, categoryName: String, categoryImageUrl: String) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             val recipes = repository.getRecipesByCategoryId(categoryId)
 
             if (recipes == null) {
@@ -38,9 +36,7 @@ class RecipesListViewModel(application: Application) : AndroidViewModel(applicat
 
             val categoryUrl = "$BASE_URL$IMAGES_PATH$categoryImageUrl"
 
-            withContext(Dispatchers.Main) {
-                _state.value = RecipesListState(recipes, categoryName, categoryUrl)
-            }
+            _state.value = RecipesListState(recipes, categoryName, categoryUrl)
         }
     }
 }
