@@ -1,7 +1,11 @@
 package com.example.englishwordsapp.data.repository
 
 import android.content.Context
+import androidx.lifecycle.LiveData
+import androidx.room.Room
 import com.example.englishwordsapp.data.api.RecipeApiService
+import com.example.englishwordsapp.data.local.AppDatabase
+import com.example.englishwordsapp.data.local.CategoriesDao
 import com.example.englishwordsapp.model.Category
 import com.example.englishwordsapp.model.Recipe
 import kotlinx.coroutines.Dispatchers
@@ -19,6 +23,8 @@ class RecipesRepository(private val context: Context) {
     }
 
     private val apiService: RecipeApiService
+    private val db: AppDatabase
+    private val categoriesDao: CategoriesDao
 
     init {
         val retrofit = Retrofit.Builder()
@@ -27,6 +33,13 @@ class RecipesRepository(private val context: Context) {
             .build()
 
         apiService = retrofit.create(RecipeApiService::class.java)
+
+        db = Room.databaseBuilder(
+            context,
+            AppDatabase::class.java, "recipe-database"
+        ).build()
+
+        categoriesDao = db.categoriesDao()
     }
 
     suspend fun getCategories(): List<Category>? = withContext(Dispatchers.IO) {
@@ -121,5 +134,11 @@ class RecipesRepository(private val context: Context) {
             putStringSet(FAVORITES_KEY, favorites)
             apply()
         }
+    }
+
+    fun getCategoriesFromCache(): LiveData<List<Category>> = categoriesDao.getAll()
+
+    suspend fun saveCategoriesToCache(categories: List<Category>) {
+        categoriesDao.insertAll(categories)
     }
 }
