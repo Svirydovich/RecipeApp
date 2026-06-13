@@ -31,8 +31,8 @@ class CategoriesListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
 
-        viewModel.categories.observe(viewLifecycleOwner) { categories ->
-            categoriesAdapter.categories = categories
+        viewModel.state.observe(viewLifecycleOwner) { state ->
+            categoriesAdapter.categories = state.categories
             categoriesAdapter.notifyDataSetChanged()
         }
     }
@@ -56,10 +56,8 @@ class CategoriesListFragment : Fragment() {
     }
 
     private fun openRecipesByCategoryId(categoryId: Int) {
-        val category = viewModel.getCategoryById(
-            categoryId,
-            viewModel.categories.value
-        ) ?: throw IllegalArgumentException("Категория с идентификатором $categoryId не найдена")
+        val category = viewModel.state.value?.categories?.find { it.id == categoryId }
+            ?: throw IllegalArgumentException("Категория с идентификатором $categoryId не найдена")
 
         findNavController().navigate(
             CategoriesListFragmentDirections.actionCategoriesListFragmentToRecipesListFragment(

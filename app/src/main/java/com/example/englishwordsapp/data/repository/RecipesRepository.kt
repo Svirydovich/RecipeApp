@@ -110,6 +110,8 @@ class RecipesRepository(private val context: Context) {
         }
     }
 
+    suspend fun getCategoriesFromCacheOnce(): List<Category> = categoriesDao.getAllOnce()
+
     fun getFavorites(): MutableSet<String> {
         val sharedPrefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
         val favoritesSet = sharedPrefs.getStringSet(FAVORITES_KEY, emptySet()) ?: emptySet()
