@@ -26,11 +26,15 @@ class CategoriesListFragment : Fragment() {
         return binding.root
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
 
-        viewModel.state.observe(viewLifecycleOwner) { state -> updateUI(state) }
+        viewModel.state.observe(viewLifecycleOwner) { state ->
+            categoriesAdapter.categories = state.categories
+            categoriesAdapter.notifyDataSetChanged()
+        }
     }
 
     private fun setupRecyclerView() {
@@ -46,19 +50,13 @@ class CategoriesListFragment : Fragment() {
         })
     }
 
-    @SuppressLint("NotifyDataSetChanged")
-    private fun updateUI(state: CategoriesListState) {
-        categoriesAdapter.categories = state.categories
-        categoriesAdapter.notifyDataSetChanged()
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 
     private fun openRecipesByCategoryId(categoryId: Int) {
-        val category = viewModel.getCategoryById(categoryId)
+        val category = viewModel.state.value?.categories?.find { it.id == categoryId }
             ?: throw IllegalArgumentException("Категория с идентификатором $categoryId не найдена")
 
         findNavController().navigate(

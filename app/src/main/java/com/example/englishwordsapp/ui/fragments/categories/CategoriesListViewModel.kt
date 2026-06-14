@@ -11,13 +11,13 @@ import kotlinx.coroutines.launch
 
 data class CategoriesListState(
     val categories: List<Category> = emptyList(),
-    val errorMessage: String? = null
+    val errorMessage: String? = null,
+    val isLoading: Boolean = false
 )
 
 class CategoriesListViewModel(application: Application) : AndroidViewModel(application) {
-    private val _state = MutableLiveData(CategoriesListState())
     private val repository = RecipesRepository(application)
-
+    private val _state = MutableLiveData(CategoriesListState())
     val state: LiveData<CategoriesListState>
         get() = _state
 
@@ -26,19 +26,21 @@ class CategoriesListViewModel(application: Application) : AndroidViewModel(appli
     }
 
     private fun loadCategories() {
+        _state.value = CategoriesListState(isLoading = true)
+
         viewModelScope.launch {
-            _state.value = _state.value?.copy(errorMessage = null)
-
-            val categories = repository.getCategories()
-            if (categories == null) {
-                _state.value = _state.value?.copy(errorMessage = "Ошибка получения данных")
-                return@launch
+            val cached = repository.getCategoriesFromCacheOnce()
+            if (cached.isNotEmpty()) {
+                _state.value = CategoriesListState(categories = cached)
             }
-            _state.value = CategoriesListState(categories = categories)
-        }
-    }
 
-    fun getCategoryById(categoryId: Int): Category? {
-        return _state.value?.categories?.find { it.id == categoryId }
+            val remote = repository.getCategories()
+            if (remote != null) {
+                repository.saveCategoriesToCache(remote)
+                _state.value = CategoriesListState(categories = remote)
+            } else if (cached.isEmpty()) {
+                _state.value = CategoriesListState(errorMessage = "Нет подключения")
+            } else _state.value = _state.value?.copy(isLoading = false)
+        }
     }
 }
