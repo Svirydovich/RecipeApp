@@ -39,7 +39,7 @@ class RecipesRepository(private val context: Context) {
         db = Room.databaseBuilder(
             context,
             AppDatabase::class.java, "recipe-database"
-        ).build()
+        ).fallbackToDestructiveMigration(false).build()
 
         categoriesDao = db.categoriesDao()
         recipesDao = db.recipesDao()
