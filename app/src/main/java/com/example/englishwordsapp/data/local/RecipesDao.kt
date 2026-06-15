@@ -11,6 +11,9 @@ interface RecipesDao {
     @Query("SELECT * FROM recipes WHERE categoryId = :categoryId")
     fun getRecipesByCategory(categoryId: Int): Flow<List<Recipe>>
 
+    @Query("SELECT * FROM recipes WHERE categoryId = :categoryId")
+    suspend fun getAllOnce(categoryId: Int): List<Recipe>
+
     @Upsert
     suspend fun insertRecipes(recipes: List<Recipe>)
 }
