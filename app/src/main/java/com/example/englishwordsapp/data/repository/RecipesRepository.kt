@@ -6,6 +6,7 @@ import androidx.room.Room
 import com.example.englishwordsapp.data.api.RecipeApiService
 import com.example.englishwordsapp.data.local.AppDatabase
 import com.example.englishwordsapp.data.local.CategoriesDao
+import com.example.englishwordsapp.data.local.RecipesDao
 import com.example.englishwordsapp.model.Category
 import com.example.englishwordsapp.model.Recipe
 import kotlinx.coroutines.Dispatchers
@@ -25,6 +26,7 @@ class RecipesRepository(private val context: Context) {
     private val apiService: RecipeApiService
     private val db: AppDatabase
     private val categoriesDao: CategoriesDao
+    private val recipesDao: RecipesDao
 
     init {
         val retrofit = Retrofit.Builder()
@@ -37,9 +39,10 @@ class RecipesRepository(private val context: Context) {
         db = Room.databaseBuilder(
             context,
             AppDatabase::class.java, "recipe-database"
-        ).build()
+        ).fallbackToDestructiveMigration(false).build()
 
         categoriesDao = db.categoriesDao()
+        recipesDao = db.recipesDao()
     }
 
     suspend fun getCategories(): List<Category>? = withContext(Dispatchers.IO) {
@@ -112,6 +115,9 @@ class RecipesRepository(private val context: Context) {
 
     suspend fun getCategoriesFromCacheOnce(): List<Category> = categoriesDao.getAllOnce()
 
+    suspend fun getRecipesByCategoryFromCacheOnce(categoryId: Int): List<Recipe> =
+        recipesDao.getAllOnce(categoryId)
+
     fun getFavorites(): MutableSet<String> {
         val sharedPrefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
         val favoritesSet = sharedPrefs.getStringSet(FAVORITES_KEY, emptySet()) ?: emptySet()
@@ -142,5 +148,9 @@ class RecipesRepository(private val context: Context) {
 
     suspend fun saveCategoriesToCache(categories: List<Category>) {
         categoriesDao.insertAll(categories)
+    }
+
+    suspend fun saveRecipesToCache(recipes: List<Recipe>) {
+        recipesDao.insertRecipes(recipes)
     }
 }

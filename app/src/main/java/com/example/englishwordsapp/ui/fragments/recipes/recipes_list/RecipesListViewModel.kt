@@ -27,16 +27,20 @@ class RecipesListViewModel(application: Application) : AndroidViewModel(applicat
 
     fun loadRecipesByCategory(categoryId: Int, categoryName: String, categoryImageUrl: String) {
         viewModelScope.launch {
-            val recipes = repository.getRecipesByCategoryId(categoryId)
-
-            if (recipes == null) {
-                _state.value = _state.value?.copy(errorMessage = "Ошибка получения данных")
-                return@launch
+            val cached = repository.getRecipesByCategoryFromCacheOnce(categoryId)
+            if (cached.isNotEmpty()) {
+                val categoryUrl = "$BASE_URL$IMAGES_PATH$categoryImageUrl"
+                _state.value = RecipesListState(recipes = cached, categoryName, categoryUrl)
             }
 
-            val categoryUrl = "$BASE_URL$IMAGES_PATH$categoryImageUrl"
-
-            _state.value = RecipesListState(recipes, categoryName, categoryUrl)
+            val remote = repository.getRecipesByCategoryId(categoryId)
+            if (remote != null) {
+                repository.saveRecipesToCache(remote)
+                val categoryUrl = "$BASE_URL$IMAGES_PATH$categoryImageUrl"
+                _state.value = RecipesListState(recipes = remote, categoryName, categoryUrl)
+            } else if (cached.isEmpty()) {
+                _state.value = _state.value?.copy(errorMessage = "Нет подключения")
+            }
         }
     }
 }
