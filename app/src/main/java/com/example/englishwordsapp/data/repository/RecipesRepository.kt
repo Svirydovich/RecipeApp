@@ -10,6 +10,7 @@ import com.example.englishwordsapp.data.local.RecipesDao
 import com.example.englishwordsapp.model.Category
 import com.example.englishwordsapp.model.Recipe
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -17,8 +18,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 class RecipesRepository(private val context: Context) {
 
     companion object {
-        private const val PREFS_NAME = "recipe_prefs"
-        private const val FAVORITES_KEY = "favorites_set"
         const val BASE_URL = "https://recipes.androidsprint.ru/"
         const val IMAGES_PATH = "api/images/"
     }
@@ -118,31 +117,14 @@ class RecipesRepository(private val context: Context) {
     suspend fun getRecipesByCategoryFromCacheOnce(categoryId: Int): List<Recipe> =
         recipesDao.getAllOnce(categoryId)
 
-    fun getFavorites(): MutableSet<String> {
-        val sharedPrefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-        val favoritesSet = sharedPrefs.getStringSet(FAVORITES_KEY, emptySet()) ?: emptySet()
-        return HashSet(favoritesSet)
+    suspend fun addToFavorites(recipeId: Int) {
+        recipesDao.updateFavorite(recipeId, true)
     }
 
-    fun addToFavorites(recipeId: Int) {
-        val currentFavorites = getFavorites()
-        currentFavorites.add(recipeId.toString())
-        saveFavorites(currentFavorites)
+    suspend fun removeFromFavorites(recipeId: Int) {
+        recipesDao.updateFavorite(recipeId, false)
     }
 
-    fun removeFromFavorites(recipeId: Int) {
-        val currentFavorites = getFavorites()
-        currentFavorites.remove(recipeId.toString())
-        saveFavorites(currentFavorites)
-    }
-
-    private fun saveFavorites(favorites: Set<String>) {
-        val sharedPrefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-        sharedPrefs.edit().apply {
-            putStringSet(FAVORITES_KEY, favorites)
-            apply()
-        }
-    }
 
     fun getCategoriesFromCache(): LiveData<List<Category>> = categoriesDao.getAll()
 
@@ -153,4 +135,6 @@ class RecipesRepository(private val context: Context) {
     suspend fun saveRecipesToCache(recipes: List<Recipe>) {
         recipesDao.insertRecipes(recipes)
     }
+
+    fun observeFavoriteRecipes(): Flow<List<Recipe>> = recipesDao.getFavoriteRecipes()
 }

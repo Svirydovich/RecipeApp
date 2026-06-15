@@ -16,4 +16,10 @@ interface RecipesDao {
 
     @Upsert
     suspend fun insertRecipes(recipes: List<Recipe>)
+
+    @Query("SELECT * FROM recipes WHERE isFavorite = 1")
+    fun getFavoriteRecipes(): Flow<List<Recipe>>
+
+    @Query("UPDATE recipes SET isFavorite = :isFavorite WHERE id = :recipeId")
+    suspend fun updateFavorite(recipeId: Int, isFavorite: Boolean)
 }
