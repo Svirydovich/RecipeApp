@@ -1,6 +1,7 @@
 package com.example.englishwordsapp.model
 
 import android.os.Parcelable
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import kotlinx.parcelize.Parcelize
@@ -16,5 +17,5 @@ data class Recipe(
     val method: List<String>,
     val imageUrl: String,
     val categoryId: Int,
-    val isFavorite: Boolean = false
+    @ColumnInfo(name = "isFavorite") val isFavorite: Boolean = false
 ) : Parcelable
