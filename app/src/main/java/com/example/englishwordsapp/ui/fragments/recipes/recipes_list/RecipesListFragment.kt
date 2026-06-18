@@ -13,6 +13,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.englishwordsapp.R
 import com.example.englishwordsapp.databinding.FragmentRecipesListBinding
+import com.example.englishwordsapp.di.RecipeApplication
+import com.example.englishwordsapp.di.RecipesListViewModelFactory
 import com.example.englishwordsapp.ui.adapters.RecipeAdapter
 
 class RecipesListFragment : Fragment() {
@@ -20,7 +22,11 @@ class RecipesListFragment : Fragment() {
     private var _binding: FragmentRecipesListBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: RecipesListViewModel by viewModels()
+    private val viewModel: RecipesListViewModel by viewModels {
+        RecipesListViewModelFactory(
+            (requireActivity().application as RecipeApplication).appContainer.recipesRepository
+        )
+    }
     private lateinit var recipeAdapter: RecipeAdapter
     private val args: RecipesListFragmentArgs by navArgs()
 

@@ -5,9 +5,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.englishwordsapp.R
-import com.example.englishwordsapp.data.repository.RecipesRepository.Companion.BASE_URL
-import com.example.englishwordsapp.data.repository.RecipesRepository.Companion.IMAGES_PATH
 import com.example.englishwordsapp.databinding.ItemRecipeBinding
+import com.example.englishwordsapp.di.AppContainer.Companion.BASE_URL
+import com.example.englishwordsapp.di.AppContainer.Companion.IMAGES_PATH
 import com.example.englishwordsapp.model.Recipe
 
 class RecipeAdapter(
