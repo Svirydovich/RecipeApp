@@ -9,6 +9,6 @@ interface Factory<T> : ViewModelProvider.Factory {
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        throw UnsupportedOperationException("Use create(savedStateHandle) instead")
+        return create(SavedStateHandle()) as T
     }
 }
