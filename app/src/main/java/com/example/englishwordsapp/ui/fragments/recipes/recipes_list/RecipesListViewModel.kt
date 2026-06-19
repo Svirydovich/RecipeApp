@@ -1,13 +1,12 @@
 package com.example.englishwordsapp.ui.fragments.recipes.recipes_list
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.englishwordsapp.data.repository.RecipesRepository
-import com.example.englishwordsapp.data.repository.RecipesRepository.Companion.BASE_URL
-import com.example.englishwordsapp.data.repository.RecipesRepository.Companion.IMAGES_PATH
+import com.example.englishwordsapp.di.AppContainer.Companion.BASE_URL
+import com.example.englishwordsapp.di.AppContainer.Companion.IMAGES_PATH
 import com.example.englishwordsapp.model.Recipe
 import kotlinx.coroutines.launch
 
@@ -18,9 +17,8 @@ data class RecipesListState(
     val errorMessage: String? = null
 )
 
-class RecipesListViewModel(application: Application) : AndroidViewModel(application) {
+class RecipesListViewModel(private val repository: RecipesRepository) : ViewModel() {
     private val _state = MutableLiveData(RecipesListState())
-    private val repository = RecipesRepository(application)
 
     val state: LiveData<RecipesListState>
         get() = _state

@@ -1,8 +1,7 @@
 package com.example.englishwordsapp.ui.fragments.recipes.favorites
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.englishwordsapp.data.repository.RecipesRepository
@@ -15,9 +14,7 @@ data class FavoritesState(
     val errorMessage: String? = null
 )
 
-class FavoritesViewModel(application: Application) : AndroidViewModel(application) {
-    private val repository = RecipesRepository(application)
-
+class FavoritesViewModel(repository: RecipesRepository) : ViewModel() {
     val state: LiveData<FavoritesState> = repository.observeFavoriteRecipes()
         .map { recipes -> FavoritesState(recipes, recipes.isEmpty()) }
         .asLiveData(viewModelScope.coroutineContext)

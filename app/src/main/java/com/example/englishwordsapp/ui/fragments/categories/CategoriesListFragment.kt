@@ -9,12 +9,18 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.englishwordsapp.databinding.FragmentListCategoriesBinding
+import com.example.englishwordsapp.di.CategoryListViewModelFactory
+import com.example.englishwordsapp.di.RecipeApplication
 import com.example.englishwordsapp.ui.adapters.CategoriesListAdapter
 
 class CategoriesListFragment : Fragment() {
     private var _binding: FragmentListCategoriesBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: CategoriesListViewModel by viewModels()
+    private val viewModel: CategoriesListViewModel by viewModels {
+        CategoryListViewModelFactory(
+            (requireActivity().application as RecipeApplication).appContainer.recipesRepository
+        )
+    }
     private lateinit var categoriesAdapter: CategoriesListAdapter
 
     override fun onCreateView(

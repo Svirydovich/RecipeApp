@@ -1,9 +1,8 @@
 package com.example.englishwordsapp.ui.fragments.categories
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.englishwordsapp.data.repository.RecipesRepository
 import com.example.englishwordsapp.model.Category
@@ -15,8 +14,7 @@ data class CategoriesListState(
     val isLoading: Boolean = false
 )
 
-class CategoriesListViewModel(application: Application) : AndroidViewModel(application) {
-    private val repository = RecipesRepository(application)
+class CategoriesListViewModel(private val repository: RecipesRepository) : ViewModel() {
     private val _state = MutableLiveData(CategoriesListState())
     val state: LiveData<CategoriesListState>
         get() = _state
