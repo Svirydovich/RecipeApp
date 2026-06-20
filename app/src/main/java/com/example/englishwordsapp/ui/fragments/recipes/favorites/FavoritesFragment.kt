@@ -10,18 +10,14 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.englishwordsapp.databinding.FragmentFavoritesBinding
-import com.example.englishwordsapp.di.FavoritesViewModelFactory
-import com.example.englishwordsapp.di.RecipeApplication
 import com.example.englishwordsapp.ui.adapters.RecipeAdapter
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class FavoritesFragment : Fragment() {
     private var _binding: FragmentFavoritesBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: FavoritesViewModel by viewModels {
-        FavoritesViewModelFactory(
-            (requireActivity().application as RecipeApplication).appContainer.recipesRepository
-        )
-    }
+    private val viewModel: FavoritesViewModel by viewModels()
     private lateinit var recipeAdapter: RecipeAdapter
 
     override fun onCreateView(

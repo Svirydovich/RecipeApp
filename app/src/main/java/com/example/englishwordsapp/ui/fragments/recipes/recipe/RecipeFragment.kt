@@ -14,20 +14,16 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.englishwordsapp.R
 import com.example.englishwordsapp.databinding.FragmentRecipeBinding
-import com.example.englishwordsapp.di.RecipeApplication
-import com.example.englishwordsapp.di.RecipeViewModelFactory
 import com.example.englishwordsapp.ui.adapters.IngredientsAdapter
 import com.example.englishwordsapp.ui.adapters.MethodAdapter
 import com.google.android.material.divider.MaterialDividerItemDecoration
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class RecipeFragment : Fragment() {
     private lateinit var ingredientsAdapter: IngredientsAdapter
     private lateinit var methodAdapter: MethodAdapter
-    private val viewModel: RecipeViewModel by viewModels {
-        RecipeViewModelFactory(
-            (requireActivity().application as RecipeApplication).appContainer.recipesRepository
-        )
-    }
+    private val viewModel: RecipeViewModel by viewModels()
     private var _binding: FragmentRecipeBinding? = null
     private val binding get() = _binding!!
     private val args: RecipeFragmentArgs by navArgs()

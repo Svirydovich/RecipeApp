@@ -5,11 +5,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.englishwordsapp.data.repository.RecipesRepository
-import com.example.englishwordsapp.di.AppContainer.Companion.BASE_URL
-import com.example.englishwordsapp.di.AppContainer.Companion.IMAGES_PATH
+import com.example.englishwordsapp.di.AppModule.Companion.BASE_URL
+import com.example.englishwordsapp.di.AppModule.Companion.IMAGES_PATH
 import com.example.englishwordsapp.model.Recipe
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 data class RecipeState(
     val recipe: Recipe? = null,
@@ -19,7 +21,8 @@ data class RecipeState(
     val errorMessage: String? = null
 )
 
-class RecipeViewModel(private val repository: RecipesRepository) : ViewModel() {
+@HiltViewModel
+class RecipeViewModel @Inject constructor(private val repository: RecipesRepository) : ViewModel() {
     private val _recipeState = MutableLiveData(RecipeState())
 
     val recipeState: LiveData<RecipeState>
