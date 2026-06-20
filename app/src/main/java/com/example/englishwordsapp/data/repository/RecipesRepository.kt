@@ -10,10 +10,11 @@ import com.example.englishwordsapp.model.Recipe
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class RecipesRepository(
+class RecipesRepository @Inject constructor(
     private val apiService: RecipeApiService,
-    private val database: AppDatabase
+    database: AppDatabase
 ) {
 
 

@@ -11,6 +11,7 @@ import com.example.englishwordsapp.R
 import com.example.englishwordsapp.databinding.ActivityMainBinding
 import com.example.englishwordsapp.model.Category
 import com.example.englishwordsapp.model.Recipe
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.serialization.json.Json
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -18,6 +19,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
