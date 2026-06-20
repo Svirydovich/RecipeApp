@@ -49,7 +49,7 @@ class AppModule {
     ).fallbackToDestructiveMigration(false).build()
 
     companion object {
-        const val BASE_URL = "https://recipes.androidsprint.ru/"
-        const val IMAGES_PATH = "api/images/"
+        const val BASE_URL = "https://recipes.androidsprint.ru/api/"
+        const val IMAGES_PATH = "images/"
     }
 }
